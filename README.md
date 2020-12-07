@@ -2,6 +2,38 @@
 
 801Labs site relaunch
 
+# Running the Docker container
+
+run `docker run -p <host port>:8080 --name 801site 801labs/website:latest`
+
+# Building + running from dockerfile
+
+Make sure you have the required docker services installed on your host.
+
+run `git clone https://github.com/Pips801/801labs-web`
+
+`cd 801labs-web/`
+
+Build the docker image `docker build . --tag website:latest`
+
+Run it `docker run -p <host port>:8080 --name 801site website:latest`
+
+# Using the source code
+
+Install some required libraries `sudo apt-get install libtool automake autoconf nasm`
+
+Clone the repository `git clone https://github.com/Pips801/801labs-web`
+
+`cd 801labs-web`
+
+Install Node version 14, and run `npm ci` to get dependencies installed.
+
+Run `npm start` to spin up a local development site with hot reloading.
+
+Once you’re done making changes or creating a new article, stop the local server process (`ctrl + c`), commit your changes (if using git), and run `npm run production`. The generated files can be found in the `/out` folder.
+
+# Directory structure
+
 * components/ - Repeated logic abstracted into reusable react components.
 * content/ - Markdown files for the blogs (news, research).
 * images/ - Images in this folder can be used with the react Image component. It automatically optimizes and generates multiple sizes for these images.
@@ -23,16 +55,6 @@
   * postcss.config.js - A config file for PostCSS - a tool that transforms the CSS. PostCSS does nothing by itself, so the config file is where you add in the plugins that do stuff. One thing to note is that one of the plugins being used is PurgeCSS that will remove all unused CSS from the generated styles.css in a production build of the site. There are a few comments in styles.css telling PurgeCSS to not strip anything from certain parts of the styles.
   * sitemap-generator.js - A config file for a nextjs sitemap generator tool.
   * tailwind.config.js - A config file for TailwindCSS. Check TailwindCSS documentation for details.
-
-# Using the source code
-
-Install some required libraries `sudo apt-get install libtool automake autoconf nasm`
-
-Install Node version 14, and run `npm ci` to get dependencies installed.
-
-Run `npm start` to spin up a local development site with hot reloading.
-
-Once you’re done making changes or creating a new article, stop the local server process (`ctrl + c`), commit your changes (if using git), and run `npm run production`. The generated files can be found in the `/out` folder.
 
 # Recommendations
 
