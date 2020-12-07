@@ -30,11 +30,9 @@ Install some required libraries `sudo apt-get install libtool automake autoconf 
 
 Install Node version 14, and run `npm ci` to get dependencies installed.
 
-Run `npm run build` to get an initial build of the site created.
-
 Run `npm start` to spin up a local development site with hot reloading.
 
-Once you’re done making changes or creating a new article, stop the local server process (`ctrl + c`), commit your changes (if using git), and run npm run production. The generated files can be found in the `/out` folder.
+Once you’re done making changes or creating a new article, stop the local server process (`ctrl + c`), commit your changes (if using git), and run `npm run production`. The generated files can be found in the `/out` folder.
 
 # Recommendations
 
