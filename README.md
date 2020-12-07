@@ -28,7 +28,7 @@
 
 Install some required libraries `sudo apt-get install libtool automake autoconf nasm`
 
-Install Node version 14, and run npm i to get dependencies installed.
+Install Node version 14, and run `npm ci` to get dependencies installed.
 
 Run `npm run build` to get an initial build of the site created.
 
