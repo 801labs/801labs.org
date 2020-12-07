@@ -1,5 +1,6 @@
 # 801labs-web
 
+801Labs site relaunch
 
 * components/ - Repeated logic abstracted into reusable react components.
 * content/ - Markdown files for the blogs (news, research).
@@ -26,9 +27,14 @@
 # Using the source code
 
 With node.js installed, run npm i to get dependencies installed.
+
 Run `npm run build` to get an initial build of the site created.
+
 Run `npm start` to spin up a local development site with hot reloading.
+
 Once you’re done making changes or creating a new article, stop the local server process (`ctrl + c`), commit your changes (if using git), and run npm run production. The generated files can be found in the `/out` folder.
-Recommendations
+
+# Recommendations
+
 Netlify or Vercel can be used to host the site. They can be set up to watch the repository master branch for changes and then run a production build and deploy it automatically when a change is detected. Editors/developers won’t need to run the production build or upload changed assets.
 
