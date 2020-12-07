@@ -21,8 +21,8 @@
   * next.config.js - A config file for Next.js that includes some plugins for mdxfiles (markdown that allows React components inside of it), and the image plugin that will optimize and generate the different image sizes.
   * package.json - A file containing all dependencies, and a list of extra scripts (detailed later on)
   * postcss.config.js - A config file for PostCSS - a tool that transforms the CSS. PostCSS does nothing by itself, so the config file is where you add in the plugins that do stuff. One thing to note is that one of the plugins being used is PurgeCSS that will remove all unused CSS from the generated styles.css in a production build of the site. There are a few comments in styles.css telling PurgeCSS to not strip anything from certain parts of the styles.
-* sitemap-generator.js - A config file for a nextjs sitemap generator tool.
-* tailwind.config.js - A config file for TailwindCSS. Check TailwindCSS documentation for details.
+  * sitemap-generator.js - A config file for a nextjs sitemap generator tool.
+  * tailwind.config.js - A config file for TailwindCSS. Check TailwindCSS documentation for details.
 
 # Using the source code
 
