@@ -1,0 +1,31 @@
+.h1 {
+    @apply font-display fluid-text-7xl;
+}
+
+.h2 {
+    @apply font-display fluid-text-6xl;
+}
+
+.h3 {
+    @apply font-display fluid-text-5xl;
+}
+
+.h4 {
+    @apply font-display fluid-text-4xl;
+}
+
+.link--white {
+    @apply text-white inline-block;
+}
+.link--white:hover,
+.link--white:focus {
+    @apply text-gray-400;
+}
+
+.link--tangerine {
+    @apply text-tangerine inline-block;
+}
+.link--tangerine:hover,
+.link--tangerine:focus {
+    @apply text-gray-400;
+}

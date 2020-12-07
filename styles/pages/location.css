@@ -1,0 +1,5 @@
+@screen lg {
+    .grid-location {
+        grid-template-rows: repeat(2, auto);
+    }
+}

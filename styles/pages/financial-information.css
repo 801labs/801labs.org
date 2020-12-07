@@ -1,0 +1,36 @@
+@screen lg {
+    .bg-financial {
+        background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2235%22%20viewBox%3D%220%200%2034.2%20175.1%22%3E%3Cpath%20d%3D%22M22.2%20175.1H12c-6.6%200-12-5.4-12-12V12C0%205.4%205.4%200%2012%200h10.2c6.6%200%2012%205.4%2012%2012v151.1c0%206.6-5.4%2012-12%2012z%22%20fill%3D%22%23cb5c5c%22%2F%3E%3C%2Fsvg%3E');
+        background-position: 93% center;
+    }
+}
+
+.bg-financial-expenses {
+    background-image: linear-gradient(to right, #084073, #0259A9, #084073 50%, #121212 75%);
+    background-position: center;
+    background-size: cover;
+}
+@screen xl {
+    .bg-financial-expenses {
+        background-image: url('/images/bg-financial-sky.png'),
+        url('/images/bg-financial-buildings.png'),
+        linear-gradient(to right, #084073, #0259A9, #084073 50%, #121212 75%);
+        background-position: top right, bottom right, center;
+        background-size: min(calc(50% - 600px), 22.75%, 273px), min(calc(50% - 600px), 27.33%, 328px), cover;
+    }
+}
+
+.financial-expenses-progress {
+    transform: rotate(180deg) translateY(48%);
+    width: 55%;
+    left: 50%;
+}
+
+@screen lg {
+    .financial-expenses-progress {
+        transform: translateY(48%);
+        width: 500px;
+        left: auto;
+        right: calc(50% + (1200px * .3));
+    }
+}

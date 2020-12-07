@@ -1,0 +1,11 @@
+details > summary {
+    list-style-type: none;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+details[open] summary {
+    @apply bg-navy-500 text-white;
+}

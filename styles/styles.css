@@ -1,0 +1,29 @@
+/* @purgecss start ignore */
+@import "tailwindcss/base";
+/* @purgecss end ignore */
+@import "./base";
+
+/* COMPONENTS */
+/* @purgecss start ignore */
+@import "tailwindcss/components";
+@import "@fortawesome/fontawesome-svg-core/styles";
+/* @purgecss end ignore */
+@import "./components/accordion";
+@import "./components/button";
+/* @purgecss start ignore */
+@import "./components/markdown";
+/* @purgecss end ignore */
+@import "./components/page";
+@import "./components/typography";
+
+@import "./pages/about";
+@import "./pages/contact";
+@import "./pages/donate";
+@import "./pages/events";
+@import "./pages/financial-information";
+@import "./pages/index";
+@import "./pages/location";
+@import "./pages/volunteer";
+
+/* UTILITIES */
+@import "tailwindcss/utilities";

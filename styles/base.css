@@ -1,0 +1,3 @@
+img, svg, video, canvas, audio, iframe, embed, object {
+    width: auto;
+}
