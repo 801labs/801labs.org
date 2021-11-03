@@ -159,13 +159,13 @@ const Index = (props) => (
                                     </span>
                                     <br/>
                                     <span className="fluid-text-3xl">
-                                        Slack Channel
+                                        Discord Server
                                     </span>
                                 </h3>
                             </div>
                             <div>
                                 <a
-                                    href="https://slack.801labs.org/"
+                                    href="https://discord.gg/7pBUdwv9Gr"
                                     rel="noopener"
                                     target="_blank"
                                     className="button button--sm">
