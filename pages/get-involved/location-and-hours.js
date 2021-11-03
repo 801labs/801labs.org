@@ -33,22 +33,22 @@ const LocationAndHours = () => (
                 <div className="mb-5">
                     <p className="font-bold">Holiday Hours</p>
                     <p>
-                        Ask on our Slack Channel or check our social media for changes.
+                        Ask on our Discord Server or check our social media for changes.
                     </p>
                 </div>
                 <div className="mb-5">
                     <p className="font-bold">Other</p>
                     <p>
                         We are open to the public whenever our key list volunteers are available to run the space. Ask
-                        our Slack Channel.
+                        our Discord Server.
                     </p>
                 </div>
                 <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-5">
                     <a className="button button--sm button--navy button--solid mr-auto md:mr-0"
-                       href="https://slack.801labs.org"
+                       href="https://discord.gg/7pBUdwv9Gr"
                        rel="noopener"
                        target="_blank">
-                        Join Slack&nbsp;&gt;
+                        Join Discord&nbsp;&gt;
                     </a>
                     <Link href="/get-involved/events">
                         <a className="button button--sm button--navy mr-auto md:mr-0">

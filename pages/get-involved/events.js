@@ -34,13 +34,13 @@ const Events = () => (
                         encourage donations. Some classes may charge a fee to cover material costs, if stated on the
                         event’s meetup page. There will often be an option to attend the class and bring your own
                         materials or just observing the class without building something. Contact the presenter on our
-                        Slack channel if you have questions.
+                        Discord Server if you have questions.
                     </p>
                 </Accordion>
                 <Accordion title="I can’t make or I missed an event, are they recorded?">
                     <p>
                         Yes! Most of our classes are archived on our youtube channel. Upon request a live stream may be
-                        possible, contact the presenter on our Slack channel for details.
+                        possible, contact the presenter on our Discord Server for details.
                     </p>
                 </Accordion>
                 <Accordion title="Do I need a membership?">
