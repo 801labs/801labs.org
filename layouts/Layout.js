@@ -149,7 +149,7 @@ const Layout = ({children}) => {
                             <p>
                                 801 Labs hackerspace is a 501(c)(3) that is open to the public!
                                 <br/>
-                                353 East 200 South Suite #B, Salt Lake City, UT 84111
+                                353 East 200 South Suite #201, Salt Lake City, UT 84111
                             </p>
                             <p>
                                 <Link href="/code-of-conduct">

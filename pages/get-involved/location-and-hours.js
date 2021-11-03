@@ -11,7 +11,7 @@ const LocationAndHours = () => (
     <Layout>
         <Meta
             title="Location and Hours"
-            description="Open Tuesday and Thursdays from 5:00 PM to 10:00 PM. Address: 353 East 200 South Suite #B, Salt Lake City, UT 84111"
+            description="Open Tuesday and Thursdays from 5:00 PM to 10:00 PM. Address: 353 East 200 South Suite #201, Salt Lake City, UT 84111"
         />
         <Hero title="Location &amp; Hours"/>
         <div className="container-1400 mx-auto px-5 pt-20 lg:pt-40 pb-20 lg:flex lg:space-x-32">
@@ -20,12 +20,12 @@ const LocationAndHours = () => (
                     className="mx-auto"
                     src="location-salt-lake-city.jpg"
                     sizes="(min-width: 1400px) 486px, (min-width: 1024px) 40vw, 100vw"
-                    alt="A hackerspace community 353 East 200 South Suite #B, Salt Lake City"
+                    alt="A hackerspace community 353 East 200 South Suite #201, Salt Lake City"
                 />
             </div>
             <div className="lg:w-3/5">
                 <div className="mb-5">
-                    <p className="font-bold">353 East 200 South Suite #B, Salt Lake City, UT 84111</p>
+                    <p className="font-bold">353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
                     <p>
                         Tuesdays and Thursdays from 5:00 PM to 10:00 PM
                     </p>

@@ -7,7 +7,7 @@ const Contact = () => (
     <Layout>
         <Meta
             title="Contact Us"
-            description="Contact us at Board@801labs.org or visit us at 353 East 200 South Suite #B Salt Lake City, UT 84111"
+            description="Contact us at Board@801labs.org or visit us at 353 East 200 South Suite #201 Salt Lake City, UT 84111"
         />
         <Hero title="Contact Us"/>
         <div className="bg-contact bg-no-repeat bg-navy-800 text-white">
@@ -18,7 +18,7 @@ const Contact = () => (
                 </div>
                 <div className="lg:w-1/3 space-y-5">
                     <address className="not-italic font-bold">
-                        353 East 200 South Suite #b<br/>
+                        353 East 200 South Suite #201<br/>
                         Salt Lake City, UT 84111
                     </address>
                     <p>
