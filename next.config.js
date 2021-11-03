@@ -16,6 +16,5 @@ module.exports = withMDX(withOptimizedImages({
     exportTrailingSlash: true,
     pageExtensions: ['mdx', 'jsx', 'js'],
     poweredByHeader: false,
-    trailingSlash: true,
-    distDir: 'build_output'
+    trailingSlash: true
 }))

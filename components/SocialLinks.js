@@ -55,12 +55,12 @@ const SocialLinks = (props) => {
         </li>
         <li className={props.liClassNames}>
             <a className={props.aClassNames}
-               href="https://slack.801labs.org/"
+               href="https://discord.gg/7pBUdwv9Gr"
                rel="noopener"
                target="_blank"
-               title="Slack">
-                <span className="sr-only">Slack</span>
-                <FontAwesomeIcon icon={faSlack} size={props.size}/>
+               title="Discord">
+                <span className="sr-only">Discord</span>
+                <FontAwesomeIcon icon={faDiscord} size={props.size}/>
             </a>
         </li>
         <li className={props.liClassNames}>
