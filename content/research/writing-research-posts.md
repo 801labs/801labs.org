@@ -19,7 +19,6 @@ All a user has to do to create an article
 * go into Github
 * navigate to the `/content/research` directory in the `main` branch.
 * create a new file with a dash seperated name, such as `example-post.md`
-* ![image](https://user-images.githubusercontent.com/5651603/140208036-1b923b0a-2791-4c1a-8928-9db18339d9c9.png)
 * import the below code block into your new markdown file. This block of code instructs the website on how to display information about the post. This includes tags, a title, a cover image, an author, etc.
 
 
@@ -39,5 +38,4 @@ author:
 ```
 
 In the markdown preview, it will look like the below.
-![image](https://user-images.githubusercontent.com/5651603/140211959-819511c2-812f-4fa2-b59c-fe42f6a7ad69.png)
 
