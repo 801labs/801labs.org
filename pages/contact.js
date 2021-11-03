@@ -14,7 +14,7 @@ const Contact = () => (
             <div className="container-1400 mx-auto px-5 py-32 space-y-20 lg:space-y-0 lg:flex">
                 <div className="lg:order-last lg:w-2/3">
                     <h2 className="h2 mb-10">Let&apos;s Talk!</h2>
-                    <iframe src="https://discord.com/widget?id=690230523615772736&theme=dark" style="width:100%;height:600px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                    <iframe src="https://discord.com/widget?id=690230523615772736&theme=dark" width="100%" height="600px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
                 </div>
                 <div className="lg:w-1/3 space-y-5">
                     <address className="not-italic font-bold">
