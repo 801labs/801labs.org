@@ -1,7 +1,0 @@
-.bg-donate {
-    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20996.2%20356.3%22%3E%3Cpath%20d%3D%22M0%200l996.2%201S353%2034.7%200%20356.3V0z%22%20fill%3D%22%23f0f3ff%22%2F%3E%3C%2Fsvg%3E'),
-    url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20850.4%20334.3%22%3E%3Cpath%20d%3D%22M0%20334.3l850.4-.9S308.1%20282.9%200%200v334.3z%22%20fill%3D%22%23f0f3ff%22%2F%3E%3C%2Fsvg%3E'),
-    url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20386.4%2088.8%22%3E%3Cpath%20d%3D%22M386.4%2088.8V0C230.1%2064.7%200%2088.8%200%2088.8h386.4z%22%20fill%3D%22%23f0f3ff%22%2F%3E%3C%2Fsvg%3E');
-    background-position: top left, bottom left, bottom right;
-    background-size: min(51.87%, 996px), min(44.27%, 850px), min(20.1%, 386px);
-}

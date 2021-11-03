@@ -1,0 +1,1 @@
+{"ast":null,"code":"import fetchJsonp from 'fetch-jsonp';\nexport async function getEvents(limit = 4) {\n  return fetchJsonp(`https://api.meetup.com/801labs/events?page=${limit}`).then(res => res.json());\n}","map":null,"metadata":{},"sourceType":"module"}
