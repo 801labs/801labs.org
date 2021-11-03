@@ -1,1 +1,0 @@
-{"ast":null,"code":"var __jsx = React.createElement;\nimport React from \"react\";\n\nvar PlaceholderText = function PlaceholderText(props) {\n  return __jsx(\"span\", {\n    className: \"bg-current\"\n  }, '&ic;'.repeat(props.characters));\n};\n\nexport default PlaceholderText;","map":null,"metadata":{},"sourceType":"module"}
