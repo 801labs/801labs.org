@@ -33,7 +33,7 @@ on:
 
 env:
   AWS_REGION: us-west-2                 # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: 801labs-private-repository           # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: 801labs-image           # set this to your Amazon ECR repository name
   ECS_SERVICE: 801labs-website-service                 # set this to your Amazon ECS service name
   ECS_CLUSTER: github-cluster                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: .aws/task.json # set this to the path to your Amazon ECS task definition
@@ -60,7 +60,13 @@ jobs:
 
     - name: Login to Amazon ECR
       id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      uses: docker/login-action@v1
+      with:
+          registry: public.ecr.aws
+          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      env:
+          AWS_REGION: ${{ env.AWS_REGION }}
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
