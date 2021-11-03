@@ -30,11 +30,11 @@ const Index = (props) => (
                     <pre>
                         <code>
                             {`{\r\n`}
-                            {`  `}<span className="text-mint">"for"</span>:{`{\r\n`}
+                            {`  `}<span className="text-mint">"for"</span>:{`[\r\n`}
                             {`    `}<span className="text-mint">"information_technology"</span>,{`\r\n`}
                             {`    `}<span className="text-mint">"electronics"</span>,{`\r\n`}
                             {`    `}<span className="text-mint">"information_security"</span>{`\r\n`}
-                            {`  },\r\n`}
+                            {`  ],\r\n`}
                             {`  `}<span className="text-mint">"enthusiasts"</span>: <span
                             className="text-lavender-400">true</span>{`\r\n`}
                             {`}`}
