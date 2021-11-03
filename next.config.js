@@ -17,4 +17,5 @@ module.exports = withMDX(withOptimizedImages({
     pageExtensions: ['mdx', 'jsx', 'js'],
     poweredByHeader: false,
     trailingSlash: true,
+    distDir: 'build_output'
 }))
