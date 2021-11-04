@@ -30,11 +30,11 @@ const Index = (props) => (
                     <pre>
                         <code>
                             {`{\r\n`}
-                            {`  `}<span className="text-mint">"for"</span>:{`\r\n`}
+                            {`  `}<span className="text-mint">"for"</span>:{`[\r\n`}
                             {`    `}<span className="text-mint">"information_technology"</span>,{`\r\n`}
                             {`    `}<span className="text-mint">"electronics"</span>,{`\r\n`}
                             {`    `}<span className="text-mint">"information_security"</span>{`\r\n`}
-                            {`  },\r\n`}
+                            {`  ],\r\n`}
                             {`  `}<span className="text-mint">"enthusiasts"</span>: <span
                             className="text-lavender-400">true</span>{`\r\n`}
                             {`}`}
@@ -159,13 +159,13 @@ const Index = (props) => (
                                     </span>
                                     <br/>
                                     <span className="fluid-text-3xl">
-                                        Slack Channel
+                                        Discord Server
                                     </span>
                                 </h3>
                             </div>
                             <div>
                                 <a
-                                    href="https://slack.801labs.org/"
+                                    href="https://discord.gg/7pBUdwv9Gr"
                                     rel="noopener"
                                     target="_blank"
                                     className="button button--sm">

@@ -11,7 +11,7 @@ const LocationAndHours = () => (
     <Layout>
         <Meta
             title="Location and Hours"
-            description="Open Tuesday and Thursdays from 5:00 PM to 10:00 PM. Address: 353 East 200 South Suite #B, Salt Lake City, UT 84111"
+            description="Open Tuesday and Thursdays from 5:00 PM to 10:00 PM. Address: 353 East 200 South Suite #201, Salt Lake City, UT 84111"
         />
         <Hero title="Location &amp; Hours"/>
         <div className="container-1400 mx-auto px-5 pt-20 lg:pt-40 pb-20 lg:flex lg:space-x-32">
@@ -20,12 +20,12 @@ const LocationAndHours = () => (
                     className="mx-auto"
                     src="location-salt-lake-city.jpg"
                     sizes="(min-width: 1400px) 486px, (min-width: 1024px) 40vw, 100vw"
-                    alt="A hackerspace community 353 East 200 South Suite #B, Salt Lake City"
+                    alt="A hackerspace community 353 East 200 South Suite #201, Salt Lake City"
                 />
             </div>
             <div className="lg:w-3/5">
                 <div className="mb-5">
-                    <p className="font-bold">353 East 200 South Suite #B, Salt Lake City, UT 84111</p>
+                    <p className="font-bold">353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
                     <p>
                         Tuesdays and Thursdays from 5:00 PM to 10:00 PM
                     </p>
@@ -33,22 +33,22 @@ const LocationAndHours = () => (
                 <div className="mb-5">
                     <p className="font-bold">Holiday Hours</p>
                     <p>
-                        Ask on our Slack Channel or check our social media for changes.
+                        Ask on our Discord Server or check our social media for changes.
                     </p>
                 </div>
                 <div className="mb-5">
                     <p className="font-bold">Other</p>
                     <p>
                         We are open to the public whenever our key list volunteers are available to run the space. Ask
-                        our Slack Channel.
+                        our Discord Server.
                     </p>
                 </div>
                 <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-5">
                     <a className="button button--sm button--navy button--solid mr-auto md:mr-0"
-                       href="https://slack.801labs.org"
+                       href="https://discord.gg/7pBUdwv9Gr"
                        rel="noopener"
                        target="_blank">
-                        Join Slack&nbsp;&gt;
+                        Join Discord&nbsp;&gt;
                     </a>
                     <Link href="/get-involved/events">
                         <a className="button button--sm button--navy mr-auto md:mr-0">

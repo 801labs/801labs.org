@@ -50,7 +50,7 @@ const Index = () => (
                 </Accordion>
                 <Accordion title="I would like to teach a class, what should I do?">
                     <p>
-                        You can reach out to us on slack and let us know, or you can use the forms on the get involved
+                        You can reach out to us on Discord and let us know, or you can use the forms on the get involved
                         page
                         to submit your class idea so we can make it happen. We’re always looking for more people who
                         would
