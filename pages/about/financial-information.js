@@ -12,8 +12,9 @@ const FinancialInformation = () => (
             description="We are a 100% volunteer run organization. Your donations and time help us meet the growing needs of our community."
         />
         <Hero title="Financial Information"/>
-        <div className="bg-financial bg-no-repeat">
-            <div className="container-1200 mx-auto px-5 py-20 space-y-5">
+        <div className="container-1200 mx-auto px-5 py-20 relative z-10">
+            <div className="bg-financial bg-no-repeat">
+            
                 <h2 className="h2">What happens to donations?</h2>
                 <p>
                     Because 801labs is a 100% volunteer run organization, there is very little administrative overhead.
