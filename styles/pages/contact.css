@@ -3,3 +3,7 @@
     background-position: top center;
     background-size: 100% min(100%, 803px), auto;
 }
+
+.bg-contact .map {
+width: 100%;
+}
