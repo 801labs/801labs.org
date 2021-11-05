@@ -2,11 +2,43 @@
 
 801Labs site relaunch
 
-# Running the Docker container
+## Contributing
 
-run `docker run -p <host port>:8080 --name 801site 801labs/website:latest`
+Make sure you have the required docker services installed.
 
-# Building + running from dockerfile
+### Preparing Your Repo
+
+1. Make sure you have docker installed on your computer.
+
+2. Fork the repo on github then check it out to your computer.
+   
+   `git clone git@github.com:801labs/801labs.org.git`
+
+3. Check out your working branch.
+   
+   If you're fixing an issue/bug name your branch `fix/<issues number>-some-description`
+   
+   If you're creating a new feature or writing a research post name your branch `feature/some-description`
+   
+   `git checkout -b fix/00-some-description`
+   
+   `git checkout -b feature/some-description`
+
+4. Start the local development docker container
+   
+   `docker compose -f docker-compose.local.yml up -d`
+   
+   This will allow you to run a local docker container without any of the node tools installed locally.
+   
+5. Make your changes and review them at `http://localhost:8080`
+
+6. Commit your changes to your working branch, and submit a pull request. If you are resolving an issue make sure to reference the issue with `#` then the issue number.
+
+7. Stop your docker container.
+
+   `docker stop 801labs`
+
+## Building + running from dockerfile
 
 Make sure you have the required docker services installed on your host.
 
@@ -18,7 +50,7 @@ Build the docker image `docker build . --tag website:latest`
 
 Run it `docker run -p <host port>:8080 --name 801site website:latest`
 
-# Using the source code
+## Using the source code
 
 Install some required libraries `sudo apt-get install libtool automake autoconf nasm`
 
@@ -32,7 +64,7 @@ Run `npm start` to spin up a local development site with hot reloading.
 
 Once you’re done making changes or creating a new article, stop the local server process (`ctrl + c`), commit your changes (if using git), and run `npm run production`. The generated files can be found in the `/out` folder.
 
-# Directory structure
+## Directory structure
 
 * components/ - Repeated logic abstracted into reusable react components.
 * content/ - Markdown files for the blogs (news, research).
@@ -56,7 +88,7 @@ Once you’re done making changes or creating a new article, stop the local serv
   * sitemap-generator.js - A config file for a nextjs sitemap generator tool.
   * tailwind.config.js - A config file for TailwindCSS. Check TailwindCSS documentation for details.
 
-# Recommendations
+## Recommendations
 
 Netlify or Vercel can be used to host the site. They can be set up to watch the repository master branch for changes and then run a production build and deploy it automatically when a change is detected. Editors/developers won’t need to run the production build or upload changed assets.
 
