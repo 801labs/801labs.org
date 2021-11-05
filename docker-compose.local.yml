@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  801labs:
+    container_name: 801labs
+    image: 801labs/website:local
+    build:
+      context: .
+      dockerfile: Dockerfile.live-development
+    volumes:
+      - ./:/app/
+      - /app/node_modules/
+    ports:
+      - 8080:3000
