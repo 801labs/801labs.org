@@ -218,7 +218,7 @@ const Index = () => (
                             <h3 className="fluid-text-lg font-bold bg-black px-5 py-1 mb-3">Tools</h3>
                             <ul className="px-5 py-1 space-y-2">
                                 <li>
-                                    Power tools: Drill &amp; Dremel
+                                    Power tools: Drill
                                 </li>
                                 <li>
                                     Logic analyzer
@@ -227,19 +227,19 @@ const Index = () => (
                                     Soldering irons
                                 </li>
                                 <li>
-                                    Hot air rework gun
+                                    Power Suppy Tester
+                                </li>
+                                <li>
+                                    Network Cable Tester
+                                </li>
+                                <li>
+                                    Multimeters
                                 </li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="fluid-text-lg font-bold bg-black px-5 py-1 mb-3">More</h3>
                             <ul className="px-5 py-1 space-y-2">
-                                <li>
-                                    Benchtop power supply
-                                </li>
-                                <li>
-                                    Video microscope
-                                </li>
                                 <li>
                                     Stereo microscope
                                 </li>
@@ -248,6 +248,12 @@ const Index = () => (
                                 </li>
                                 <li>
                                     Touch screens
+                                </li>
+                                <li>
+                                    Teaching Laptops (12)
+                                </li>
+                                <li>                            
+                                    Practice Server Cluster (5 NUC's and growing)
                                 </li>
                             </ul>
                         </div>
