@@ -13,7 +13,7 @@ const Contact = () => (
 		<div className="bg-contact bg-no-repeat bg-navy-800 text-white">
 			<div className="container-1400 mx-auto px-5 py-32 space-y-20 lg:space-y-0 lg:flex">
 				<div className="lg:order-last lg:w-2/3">
-					<h2 className="h2 mb-10">Square Up Thots!</h2>
+					<h2 className="h2 mb-10">Come visit us!</h2>
 					<div className="lg:flex mb-4">
 						<div className="lg:w-full">
 							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.848712761406!2d-111.88284848453371!3d40.76535207932616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8752f572b2a9a799%3A0x383ba8b422af2b1d!2s801Labs!5e0!3m2!1sen!2sus!4v1636043405319!5m2!1sen!2sus" width="100%" height="450" allowFullScreen="" loading="lazy" className="map"></iframe>
