@@ -85,18 +85,6 @@ const LocationAndHours = () => (
                 <LocationMap />
             </div>
         </div>
-        <div className="container-1200 mx-auto px-5 pt-20 pb-40 text-center">
-            <h2 className="h2 mb-10">Virtual Tour</h2>
-            <div className="">
-                <YoutubeEmbed
-                    poster="virtual-tour-a-community-hackerspace-utah.jpg"
-                    width={1180}
-                    height={410}
-                    alt="Virtual tour of the community hackerspace in Utah"
-                    videoId="dQw4w9WgXcQ" />
-            </div>
-        </div>
     </Layout>
 )
-
 export default LocationAndHours;
