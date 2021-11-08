@@ -42,9 +42,9 @@ Make sure you have the required docker services installed.
 
 Make sure you have the required docker services installed on your host.
 
-run `git clone https://github.com/Pips801/801labs-web`
+run `git clone https://github.com/80llabs/801labs.org`
 
-`cd 801labs-web/`
+`cd 801labs.org/`
 
 Build the docker image `docker build . --tag website:latest`
 
@@ -54,9 +54,9 @@ Run it `docker run -p <host port>:8080 --name 801site website:latest`
 
 Install some required libraries `sudo apt-get install libtool automake autoconf nasm`
 
-Clone the repository `git clone https://github.com/Pips801/801labs-web`
+Clone the repository `git clone https://github.com/801labs/801labs.org`
 
-`cd 801labs-web`
+`cd 801labs.org/`
 
 Install Node version 14, and run `npm ci` to get dependencies installed.
 
@@ -87,8 +87,4 @@ Once you’re done making changes or creating a new article, stop the local serv
   * postcss.config.js - A config file for PostCSS - a tool that transforms the CSS. PostCSS does nothing by itself, so the config file is where you add in the plugins that do stuff. One thing to note is that one of the plugins being used is PurgeCSS that will remove all unused CSS from the generated styles.css in a production build of the site. There are a few comments in styles.css telling PurgeCSS to not strip anything from certain parts of the styles.
   * sitemap-generator.js - A config file for a nextjs sitemap generator tool.
   * tailwind.config.js - A config file for TailwindCSS. Check TailwindCSS documentation for details.
-
-## Recommendations
-
-Netlify or Vercel can be used to host the site. They can be set up to watch the repository master branch for changes and then run a production build and deploy it automatically when a change is detected. Editors/developers won’t need to run the production build or upload changed assets.
 
