@@ -29,7 +29,7 @@ const LocationAndHours = () => (
                     COVID-19 Restrictions
                     </p>
                     <p style={{color: 'red'}} >
-                        A vaccination or negative COVID-19 test (within the last 7 days) is required to enter the hackerspace. We are currently on the honor system, however private verification of vaccine or negative test status will be required in the future.  Effective: November 5th 2021
+                        A vaccination or negative COVID-19 test (within the last 7 days) is required to enter the hackerspace.
                     </p>
                 </div>    
                 <div className="mb-5">
