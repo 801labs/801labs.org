@@ -165,7 +165,7 @@ const Index = (props) => (
                             </div>
                             <div>
                                 <a
-                                    href="https://discord.gg/7pBUdwv9Gr"
+                                    href="https://discord.gg/801labs"
                                     rel="noopener"
                                     target="_blank"
                                     className="button button--sm">
