@@ -35,6 +35,15 @@ const Meta = (props) => {
                 rel="stylesheet" key="fonts"/>
             {noindex && <meta name="robots" content="noindex" key="robots"/>}
             <meta name="google-site-verification" content="QnlAT_0caLTAeL1e8V-RlHWBX7xauM_CnxY_5-ltIF4" />
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-1LF63NTD3P"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-1LF63NTD3P');
+            </script>
         </Head>
     )
 }
