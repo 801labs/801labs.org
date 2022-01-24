@@ -2,7 +2,7 @@
 title: Writing research posts
 slug: writing-research-posts
 date_published: 2021-11-03T02:33:04.000Z
-date_updated: 2021-11-03T02:35:15.000Z
+date_updated: 2022-04-24T12:35:15.000Z
 tags: How to, Tutorial
 excerpt: This guide will go over all the details and steps required to post a research article.
 cover: 'image.png'
@@ -16,7 +16,8 @@ Lets talk about how to write a research post to appear on the research portal ht
 Previously, we used the platform Ghost to write and publish research articles, how tos, and anouncments. This time around in the new website, we have had the research blog function built directly in. 
 
 All a user has to do to create an article
-* go into Github
+* go into [Github](https://github.com/801labs/801labs.org)
+* fork the repo
 * navigate to the `/content/research` directory in the `main` branch.
 * create a new file with a dash seperated name, such as `example-post.md`
 * import the below code block into your new markdown file. This block of code instructs the website on how to display information about the post. This includes tags, a title, a cover image, an author, etc.
@@ -37,5 +38,5 @@ author:
 ---
 ```
 
-In the markdown preview, it will look like the below.
-
+* write your post
+* create a pull request with your post
