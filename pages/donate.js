@@ -34,7 +34,7 @@ const Donate = () => (
                         Helps maintain our physical equipment for a month.
                     </p>
                     <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BWV8WFGYAEECN&source=website"
+                        href="https://every.org/801labs/"
                         target="_blank"
                         rel="noopener"
                         className="button button--navy button--solid button--sm block mt-auto">
@@ -47,7 +47,7 @@ const Donate = () => (
                         Ensures that our online community can stay connected for a month.
                     </p>
                     <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BWV8WFGYAEECN&source=website"
+                        href="https://every.org/801labs/"
                         target="_blank"
                         rel="noopener"
                         className="button button--navy button--solid button--sm block mt-auto">
@@ -60,7 +60,7 @@ const Donate = () => (
                         Allows us to teach a single class or hold a public event.
                     </p>
                     <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BWV8WFGYAEECN&source=website"
+                        href="https://every.org/801labs/"
                         target="_blank"
                         rel="noopener"
                         className="button button--navy button--solid button--sm block mt-auto">
@@ -73,7 +73,7 @@ const Donate = () => (
                         Any amount you are willing to donate will help us reach our goals.
                     </p>
                     <a
-                        href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BWV8WFGYAEECN&source=website"
+                        href="https://every.org/801labs/"
                         target="_blank"
                         rel="noopener"
                         className="button button--navy button--solid button--sm block mt-auto">
