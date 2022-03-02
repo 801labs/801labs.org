@@ -41,7 +41,7 @@ const FinancialInformation = () => (
                         <li><strong>(Avg) Annual donation income: $27,400</strong></li>
                         <li>$10,000 yearly DC801 donation</li>
                         <li>$1,450 monthly recurring donations</li>
-                        <li>As a [pending] public 501(c)(3) all yearly IRS 990 forms are public record.</li>
+                        <li>As a public 501(c)(3) all yearly IRS 990 forms are public record.</li>
                     </ul>
                 </div>
             </div>
