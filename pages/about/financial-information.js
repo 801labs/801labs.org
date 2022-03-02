@@ -38,7 +38,7 @@ const FinancialInformation = () => (
                 </div>
                 <div className="lg:w-1/2">
                     <ul className="space-y-2">
-                        <li><strong>(Avg) Annual donation income: $27,400</strong></li>
+                        <li><strong>(Avg) Annual donation income: $14,200</strong></li>
                         <li>$10,000 yearly DC801 donation</li>
                         <li>$1,450 monthly recurring donations</li>
                         <li>As a public 501(c)(3) all yearly IRS 990 forms are public record.</li>
