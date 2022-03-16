@@ -62,7 +62,7 @@ const Index = (props) => (
             <div className="lg:w-1/2 bg-black relative grid">
                 <Image
                     className="absolute object-cover inset-0 h-full w-full opacity-40"
-                    src="a-community-hackerspace-location-map.jpg"
+                    src="801labs_map_location.png"
                     sizes="(min-width: 1920px) 960px, (min-width: 1280px) 50vw, 100vw"
                     alt="801 Labs - A community Hackerspace location"
                 />
