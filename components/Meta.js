@@ -35,6 +35,11 @@ const Meta = (props) => {
                 rel="stylesheet" key="fonts"/>
             {noindex && <meta name="robots" content="noindex" key="robots"/>}
             <meta name="google-site-verification" content="QnlAT_0caLTAeL1e8V-RlHWBX7xauM_CnxY_5-ltIF4" />
+            <script>
+                if ((window.location.host == "801labs.org" || window.location.host == "www.801labs.org") && window.location.protocol != "https:") {
+                  window.location.protocol = "https:"
+                }
+            </script>
         </Head>
     )
 }
