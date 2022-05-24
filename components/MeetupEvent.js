@@ -34,7 +34,7 @@ const MeetupEvent = (props) => {
                 icon={props.event ? (props.event.is_online_event ? faVideo : faMapMarkerAlt) : faSpinner}
                 spin={!props.event} />
             {props.event
-                ? (props.event.is_online_event ? 'Online Event' : props.event.venue.name)
+                ? (props.event.is_online_event ? 'Online Event' : (props.event?.venue?.name || '801Labs Hackerspace'))
                 : <PlaceholderText characters={4} />
             }
         </div>
