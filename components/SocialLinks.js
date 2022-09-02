@@ -12,7 +12,7 @@ const SocialLinks = (props) => {
     return <ul className={"flex flex-wrap " + props.ulClassNames}>
         <li className={props.liClassNames}>
             <a className={props.aClassNames}
-               href="https://discord.gg/801labs"
+               href="https://discord.gg/uRSthurdPY"
                rel="noopener"
                target="_blank"
                title="Discord">
