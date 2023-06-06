@@ -137,7 +137,7 @@ const Layout = ({children}) => {
                         </div>
                         <div className="border-t border-white fluid-text-sm text-center pt-10 space-y-5">
                             <p>
-                                &copy; {(new Date()).getFullYear()} 801Labs.com. All rights reserved.
+                                &copy; {(new Date()).getFullYear()} 801Labs.org. All rights reserved.
                             </p>
                             <p>
                                 <Link href="/donate">
