@@ -13,10 +13,11 @@ RewriteRule ^phishing-campaign-research-ep-2/?$  /research-portal/post/phishing-
 RewriteRule ^ascii-art-in-hidden-places/?$  /research-portal/post/ascii-art-in-hidden-places/? [R=301,NC,L]
 RewriteRule ^phishing-campaign-research/?$  /research-portal/post/phishing-campaign-research/? [R=301,NC,L]
 RewriteRule ^access-control-exploitation-part-1/?$  /research-portal/post/access-control-exploitation-part-1/? [R=301,NC,L]
-Redirect 301 /events/  https://801labs.com/get-involved/events/
-Redirect 301 /location-and-hours/  https://801labs.com/get-involved/location-and-hours/
-Redirect 301 /resources/  https://801labs.com/research-portal
-Redirect 301 /volunteer/  https://801labs.com/get-involved/
+Redirect 301 /events/  https://801labs.org/get-involved/events/
+Redirect 301 /location-and-hours/  https://801labs.org/get-involved/location-and-hours/
+Redirect 301 /resources/  https://801labs.org/research-portal
+Redirect 301 /research/  https://801labs.org/research-portal
+Redirect 301 /volunteer/  https://801labs.org/get-involved/
 
 # Redirects domain.com/file.html to domain.com/file
 <IfModule mod_rewrite.c>
