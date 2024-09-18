@@ -25,14 +25,6 @@ const LocationAndHours = () => (
             </div>
             <div className="lg:w-3/5">
                 <div className="mb-5">
-                    <p className="font-bold" >
-                    COVID-19 Restrictions
-                    </p>
-                    <p style={{color: 'red'}} >
-                        A vaccination or negative COVID-19 test (within the last 7 days) is required to enter the hackerspace.
-                    </p>
-                </div>    
-                <div className="mb-5">
                     <p className="font-bold">353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
                     <p>
                         Thursdays from 5:00 PM to 10:00 PM and other days by announcement.
