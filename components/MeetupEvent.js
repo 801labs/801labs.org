@@ -39,18 +39,12 @@ const MeetupEvent = (props) => {
             }
         </div>
         <div className="flex justify-between items-center fluid-text-sm">
-            <div className="text-gray-600">
+            <div className="text-gray-600 truncate">
                 {props.event
-                    ? `${props.event.yes_rsvp_count} ${props.event.yes_rsvp_count === 1 ? 'attendee' : 'attendees'}`
-                    : <PlaceholderText characters={4} />
+                        ? (<span dangerouslySetInnerHTML={{__html: props.event.description}}></span>)
+                    : <PlaceholderText characters={50} />
                 }
             </div>
-            <span className="py-2 px-4 rounded-md border border-teal-600 group-focus:border-teal-800 text-teal-600 group-focus:text-white group-hover:text-white group-focus:bg-teal-600 group-hover:bg-teal-600">
-                {props.event
-                    ? 'Attend'
-                    : <PlaceholderText characters={2} />
-                }
-            </span>
         </div>
     </Fragment>
     

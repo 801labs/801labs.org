@@ -13,8 +13,8 @@ class MeetupEvents extends Component {
 
     componentDidMount() {
         getEvents(this.props.limit)
-            .then((json) => {
-                this.setState({ events: 'data' in json ? json.data : [] })
+            .then((events) => {
+                this.setState({ events })
             })
             .catch((err) => {
                 console.log(err);
