@@ -60,7 +60,7 @@ const Events = () => (
                 </Accordion>
                 <Accordion title="I would like to request a topic be covered in a class, what should I do?">
                     <p>
-                        We’ve got a form on our get involved page for just this occasion. If you let us know what you’re
+                        If you let us know what you’re
                         looking for, we can ask among the community if there is anyone who would like to teach a class
                         on a specific topic. If there is interest in a topic, we will do our best to find someone
                         qualified to teach about it, but we may not be able to make every request into a class.
