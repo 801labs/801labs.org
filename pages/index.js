@@ -22,7 +22,7 @@ const Index = (props) => (
                     </h1>
                     <Link href="/get-involved/events">
                         <a className="button button--white">
-                            Sign Up For Our Next Event&nbsp;&gt;
+                            Check out our upcoming events&nbsp;&gt;
                         </a>
                     </Link>
                 </div>
