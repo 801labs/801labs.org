@@ -28,6 +28,13 @@ const Events = () => (
                         to the public.
                     </p>
                 </Accordion>
+                <Accordion title="Do I need to RSVP to attend?">
+                    <p>
+                        Not at all! All 801 Labs events are free and open to the public, unless explicitly stated. You do not
+                        need to RSVP to any event if you do not want to. The only exceptions to this rule is if the event requires a
+                        headcount (such as paid events with materials). This will be clearly stated in the event's description.
+                    </p>
+                </Accordion>
                 <Accordion title="Are events free?">
                     <p>
                         All of our events are open to the public, most are free, some are paid. We always accept and
