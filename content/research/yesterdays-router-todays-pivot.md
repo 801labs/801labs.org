@@ -1,14 +1,14 @@
 ---
 title: Yesterday's Router, Today's Pivot!
-slug: residential-threat-intel-w-oak
+slug: yesterdays-router-todays-pivot
 date_published: 2025-05-29T21:51:34+00:00
 date_updated: 2025-05-29T21:51:34+00:00
 tags: Threat-Intel, Linux, Oaks-Internet-Safari
 excerpt: Hunting Residential Threats and Fighting Automated Botnets
-cover: '2025/5/residential-threat-intel-w-oak/banner.png'
+cover: '2025/5/yesterdays-router-todays-pivot/banner.png'
 author:
   name: OakAtsume
-  avatar: 'avatars/oak.gif'
+  avatar: 'avatars/oak.jpg'
 ---
 
 # Yesterday's Router, Today's Pivot!
@@ -28,7 +28,7 @@ I believe the residential space deserves more attention. That’s where real peo
 Since I started running a honeypot in a residential network, one thing became clear: **we're under constant attack!** 
 
 Governments like to point fingers at China, Russia, North Korea. But in reality, it's often more mundane. The biggest threat to our digital lives may not be a foreign nation, but instead **the negligence of vendors and users alike!**
-![Attack-Map](/images/2025/5/residential-threat-intel-w-oak/country-map.png)
+![Attack Map](2025/5/yesterdays-router-todays-pivot/country-map.png)
 
 ## Who's Knocking, and What are they doing??
 
@@ -36,10 +36,10 @@ The vast majority of attacks I observed targeted Unix-like devices, Routers, IP 
 The attackers typically rely on two approaches:
 
 * **Brute Force Attacks** on SSH/TELNET credentials.
-![Creds-Map](/images/2025/5/residental-threat-intel-w-oak/creds.png)
+![Creds-Map](2025/5/yesterdays-router-todays-pivot/creds.png)
 
 * **Exploitation of known vulnerabilities** in outdated devices.
-![Attack](/images/2025/5/residental-threat-intel-w-oak/attack.png)
+![Attack](2025/5/yesterdays-router-todays-pivot/attack.png)
 
 It's not sophisticated, but it doesn't have to be! It only takes one vulnerable device to give an attacker a foothold.
 
@@ -144,7 +144,7 @@ If this project has taught me anything, it’s this: **residential cybersecurity
 
 We may not be able to stop every attack, but we can do something even more powerful: **understand them**. And understanding is the first step toward fighting back.
 
-![Skibbity-Toilet](/images/2025/5/residental-threat-intel-w-oak/atack-logs.png)
+![Skibbity-Toilet](2025/5/yesterdays-router-todays-pivot/atack-logs.png)
 
 > Break-Thru, I acknowledge this blog is very boring lol; but it's meant to be formal. Hopefully if I have more time I will make some more that are fun!
 
