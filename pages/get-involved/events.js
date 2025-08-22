@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "../../layouts/Layout";
 import Accordion from "../../components/Accordion";
 import Hero from "../../components/Hero";
-import MeetupEvents from "../../components/MeetupEvents";
+import CalendarFrame from "../../components/CalendarFrame";
 import Meta from "../../components/Meta";
 
 const Events = () => (
@@ -13,9 +13,9 @@ const Events = () => (
         />
         <Hero title="Events" />
         <div className="bg-lavender-900 text-white bg-events bg-no-repeat">
-            <div className="container mx-auto px-5 pt-20 md:pt-40 pb-20">
+            <div className="container mx-auto px-5 pt-20 md:pt-40 pb-10">
                 <h2 className="h2 text-center mb-12 sr-only">Upcoming Events</h2>
-                <MeetupEvents limit={8}/>
+                <CalendarFrame />
             </div>
             <div className="container-1200 mx-auto px-5 pt-20 pb-40">
                 <h2 className="h2 text-center mb-12">

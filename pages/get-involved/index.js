@@ -4,7 +4,7 @@ import Layout from "../../layouts/Layout";
 import Accordion from "../../components/Accordion";
 import Hero from "../../components/Hero";
 import LocationMap from "../../components/LocationMap";
-import MeetupEvents from "../../components/MeetupEvents";
+import CalendarFrame from "../../components/CalendarFrame";
 import Meta from "../../components/Meta";
 import SocialLinks from "../../components/SocialLinks";
 
@@ -105,7 +105,7 @@ const Index = () => (
                 <div className="container mx-auto px-5 py-20">
                     <h2 className="h2 text-center mb-20">Events</h2>
                     <div className="mb-20">
-                        <MeetupEvents />
+                        <CalendarFrame />
                     </div>
                     <div className="text-center">
                         <Link href="/get-involved/events">

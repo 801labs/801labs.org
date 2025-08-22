@@ -13,7 +13,6 @@ module.exports = withMDX(withOptimizedImages({
         adapter: require('responsive-loader/sharp'),
         sizes: [320, 640, 960, 1280, 1900]
     },
-    exportTrailingSlash: true,
     pageExtensions: ['mdx', 'jsx', 'js'],
     poweredByHeader: false,
     trailingSlash: true

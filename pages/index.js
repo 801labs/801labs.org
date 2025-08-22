@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Layout from "../layouts/Layout";
-import MeetupEvents from "../components/MeetupEvents";
+import CalendarFrame from "../components/CalendarFrame";
 import Meta from "../components/Meta";
 import PostPreview from "../components/PostPreview";
 import SocialLinks from "../components/SocialLinks";
@@ -105,10 +105,10 @@ const Index = (props) => (
         </div>
         <div className="bg-navy-800 text-white">
             <div className="bg-index-events bg-repeat-x">
-                <div className="container mx-auto px-5 pt-20 md:pt-40 pb-20">
+                <div className="container mx-auto px-5 pt-20 md:pt-40 pb-10">
                     <h2 className="h2 text-center mb-20">Upcoming Events</h2>
                     <div className="mb-20">
-                        <MeetupEvents/>
+                        <CalendarFrame />
                     </div>
                     <div className="text-center">
                         <Link href="/get-involved/events">
