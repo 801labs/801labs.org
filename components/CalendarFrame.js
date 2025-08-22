@@ -6,7 +6,7 @@ const CalendarFrame = () => (
       src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FDenver&showPrint=0&src=Y190a2Q1NjhrcGZtZmRudXM5ZnJ2c3Y1ZmZzMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%2333b679"
       style={{
         border: "solid 1px #777",
-        maxWidth: "800px",
+        maxWidth: "1160px",
         width: "100%",
         margin: "0 auto",
       }}
