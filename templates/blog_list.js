@@ -112,7 +112,7 @@ export default async function (config) {
         <hr />
         <p>${description}</p>
       </div>
-<!--  <div class="tags window"><pre>${[...tags.keys()].map(tagToLink).join('\n')}</pre></div>-->
+      <div class="tags window"><h2>Tags</h2><div class="tags-nav">${[...tags.keys()].map(tagToLink).join('\n')}</div></div>
       <div class="blog-list">
         ${posts.join('\n')}
       </div>
@@ -123,7 +123,7 @@ export default async function (config) {
     ...config,
     content: /* html */`
       <div class="intro window">${config.content}</div>
-<!--  <div class="tags window"><pre>${[...tags.keys()].join('\n')}</pre></div> -->
+      <div class="tags window"><h2>Tags</h2><div class="tags-nav">${[...tags.keys()].map((t) => tagToLink(t)).join('\n')}</div></div>
       <div class="blog-list">
         ${posts.join('\n')}
       </div>

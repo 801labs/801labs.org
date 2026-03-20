@@ -62,7 +62,7 @@ const createPage = async (config) => {
     basePath,
   };
   const output = await pageTemplate(templateConfig, templateMap);
-  writeFile(prefixedPath, output.content);
+  await writeFile(prefixedPath, output.content);
   return output;
 };
 

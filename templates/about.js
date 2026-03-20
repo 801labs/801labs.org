@@ -24,7 +24,7 @@ export default function (config) {
     <li>Embedded: Arduino, ESP, Arm, Propeller, Automotive</li>
   </ul>
   <h3>What is the difference between 801 Labs and DC801?</h3>
-  <p>While both are integral parts of the Utah hacker community, 801 Labs and DC801 are separate entities. 801 Labs is the non-profit physical place while DC801 is the people. Neither have formal membership. Will I see those people IRL at the place? Yes, the 801 Labs hackerspace is a [pending] public 501(c)(3) that is open to the public, we welcome everyone.</p>
+  <p>While both are integral parts of the Utah hacker community, 801 Labs and DC801 are separate entities. 801 Labs is the non-profit physical place while DC801 is the people. Neither have formal membership. Will I see those people IRL at the place? Yes, the 801 Labs hackerspace is a public 501(c)(3) that is open to the public, we welcome everyone.</p>
   <p>DC801 is the local DEFCON user group. Presentations from DC801 focus on information and general security. For more information on DC801 visit www.dc801.org</p>
   <h3>What is the history of 801 Labs?</h3>
   <ul>
