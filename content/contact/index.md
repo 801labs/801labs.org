@@ -5,4 +5,4 @@ template: contact
 
 # Contact Us!
 
-Come hang out with us on Discord, or at our physical hackerspace!
+Come visit our hackerspace! We're open to the public — stop by, check out the space, and meet the community.
