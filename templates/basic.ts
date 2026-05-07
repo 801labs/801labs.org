@@ -1,4 +1,6 @@
-export default function (config) {
+import type { Config, TemplateFunction, TemplateMap, TemplateOutput } from '../shared.ts';
+
+const basic: TemplateFunction = (config: Config, _templateMap: TemplateMap) => {
   const {
     title,
     content,
@@ -82,3 +84,5 @@ ${ description ? '    <meta name="description" content="' + description + '" />'
 `.trim() + '\n'
   };
 };
+
+export default basic;

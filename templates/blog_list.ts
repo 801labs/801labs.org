@@ -3,12 +3,13 @@ import { readdir, writeFile } from 'node:fs/promises'
 import {
   readMarkdownWithFrontMatter,
   unwrapString,
-  stringToSlug,
-} from '../shared.js'
-import basic from './basic.js'
+  stringToSlug
+} from '../shared.ts'
+import type { Config, TemplateFunction, TemplateMap, TemplateOutput } from '../shared.ts'
+import basic from './basic.ts'
 import { createCanvas, loadImage } from '@napi-rs/canvas'
 
-export default async function (config) {
+const blogList: TemplateFunction = async (config: Config, templateMap: TemplateMap): Promise<TemplateOutput> => {
   const { basePath } = config;
   const pathRoot = dirname(config.path) + '/'
   const inputPrefix = `content/`
@@ -21,18 +22,26 @@ export default async function (config) {
   const scanResult = (await readdir(inputPath, {
     recursive: true
   }).catch(() => [])).filter(s => indexRegex.test(s))
-  const tagToLink = (t) => `<a href="${basePath}/blog/tag/${stringToSlug(t)}/">${t}</a>`;
-  const tags = new Set();
-  const postTagMap = {};
-  const datePub = (p) => p.frontMatter.date_published;
-  const sortPostsChronologically = (a, b) => datePub(b).localeCompare(datePub(a));
-  const posts = (
+  const tagToLink = (t: string): string => `<a href="${basePath}/blog/tag/${stringToSlug(t)}/">${t}</a>`;
+  const tags = new Set<string>();
+
+  type PostPage = {
+    thumbnail: string;
+    link: string;
+    tagLinks: string[];
+    frontMatter: any;
+    content: string;
+  };
+
+  const postTagMap: { [key: string]: PostPage[] } = {};
+  const datePub = (p: { frontMatter: { date_published: string } }): string => p.frontMatter.date_published;
+  const sortPostsChronologically = (a: { frontMatter: { date_published: string } }, b: { frontMatter: { date_published: string } }): number => datePub(b).localeCompare(datePub(a));
+  
+  const postData = (
     await Promise.all(scanResult.map(async item => {
       const {frontMatter} = await readMarkdownWithFrontMatter(inputPath, item)
-      const postTags = frontMatter.tags?.split(', ') || [];
-      const tagLinks = postTags.map((t)=>{tags.add(t); return t}).map(tagToLink);
       const linkRelative = normalize(`${item.replace(/index\.md$/, '')}`).replace(/\\/g, '/')
-      const sourcePath = normalize(`${inputPrefix}${pathRoot}${linkRelative}${unwrapString(frontMatter.cover)}`)
+      const sourcePath = normalize(`${inputPrefix}${pathRoot}${linkRelative}${unwrapString(frontMatter.cover || '')}`)
       const canvas = createCanvas(width, height)
       const ctx = canvas.getContext('2d')
       console.log('Generating thumbnail for:', sourcePath);
@@ -52,6 +61,22 @@ export default async function (config) {
       await writeFile(`${outputPrefix}${pathRoot}${thumbnailRelative}`, thumbnailData);
       const link = basePath + '/blog/' + linkRelative;
       const thumbnail = `${link}thumbnail.jpg`
+      
+      return {
+        item,
+        frontMatter,
+        linkRelative,
+        link,
+        thumbnail
+      };
+    }))
+  );
+
+  const posts = postData.map(post => {
+      const { frontMatter, linkRelative, link, thumbnail, item } = post;
+      const postTags = frontMatter.tags?.split(', ') || [];
+      const tagLinks = postTags.map((t: string)=>{tags.add(t); return t}).map(tagToLink);
+
       const content = /* html */ `<article class="blog-item window">
         <div class="image">
           <a href="${link}">
@@ -70,41 +95,44 @@ export default async function (config) {
           ? '<p class="tags">tags: ' + tagLinks.join(', ') + '</p>'
           : ''
       }
-          <p class="date">date: ${frontMatter.date_published.split('T')[0]}</p>
+          <p class="date">date: ${frontMatter.date_published?.split('T')[0]}</p>
           <p class="author">
             <span class="author-name">author:</span>
-            <img class="author-avatar" src="${basePath}/images/${unwrapString(frontMatter.author_avatar)}" alt="" />
+            <img class="author-avatar" src="${basePath}/images/${unwrapString(frontMatter.author_avatar || '')}" alt="" />
             <span class="author-name">${frontMatter.author_name}</span>
           </p>
         </div>
       </article>`;
-      const page = { thumbnail, link, tagLinks, frontMatter, content };
-      postTags.forEach((tag) => {
+      const page: PostPage = { thumbnail, link, tagLinks, frontMatter, content };
+      postTags.forEach((tag: string) => {
         const slug = stringToSlug(tag);
         postTagMap[slug] = postTagMap[slug] || [];
         postTagMap[slug].push(page);
         postTagMap[slug].sort(sortPostsChronologically);
       })
       return page;
-    }))
-  )
+    })
     .sort(sortPostsChronologically)
     .map((page) => page.content);
   const alphabeticalTags = Object.keys(postTagMap);
   alphabeticalTags.sort((a, b) => a.localeCompare(b))
-  const derivedPages = await Promise.all(alphabeticalTags.map(async (tag) => {
+  const derivedPages: Config[] = await Promise.all(alphabeticalTags.map(async (tag) => {
+    const slug = stringToSlug(tag);
+    const derivedPath = normalize(config.path.replace('index.html', '') + 'tag/' + slug + '/index.html');
+    const depth = derivedPath.split(/[/\\]/).length - 1;
+    const derivedBasePath = depth === 0 ? '.' : new Array(depth).fill('..').join('/');
+
     const posts = postTagMap[tag].map((p) => p.content
-      .replaceAll(`"${basePath}`, `"../../${basePath}`)
+      .replaceAll(`"${basePath}`, `"${derivedBasePath}`)
     );
     const description = `Posts tagged: ${tag}`;
-    const tagToLink = (t) => `<a href="${basePath}/blog/tag/${stringToSlug(t)}/"${
+    const tagToLinkWithActive = (t: string): string => `<a href="${derivedBasePath}/blog/tag/${stringToSlug(t)}/"${
       t === tag ? ' class="active"' : ''
     }>${t}</a>`;
-    const slug = stringToSlug(tag);
     return {
       ...config,
       template: 'basic',
-      path: normalize(config.path.replace('index.html', '') + 'tag/' + slug + '/index.html'),
+      path: derivedPath,
       title: description,
       description,
       renderedContent: /* html */`
@@ -112,7 +140,7 @@ export default async function (config) {
         <hr />
         <p>${description}</p>
       </div>
-      <div class="tags window"><h2>Tags</h2><div class="tags-nav">${[...tags.keys()].map(tagToLink).join('\n')}</div></div>
+      <div class="tags window"><h2>Tags</h2><div class="tags-nav">${[...tags.keys()].map(tagToLinkWithActive).join('\n')}</div></div>
       <div class="blog-list">
         ${posts.join('\n')}
       </div>
@@ -129,5 +157,7 @@ export default async function (config) {
       </div>
 `,
     derivedPages,
-  })
+  }, templateMap)
 }
+
+export default blogList;

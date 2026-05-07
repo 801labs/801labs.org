@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "node index.js"
+    "build": "node index.ts",
+    "check": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,11 @@
     "markdown-it": "^14.1.0"
   },
   "engines": {
-    "node": ">=18.20.1"
+    "node": ">=22.18.0"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.3"
   }
 }

@@ -1,10 +1,11 @@
-import basic from './basic.js';
-import { stringToSlug, unwrapString } from '../shared.js'
+import basic from './basic.ts';
+import { stringToSlug, unwrapString } from '../shared.ts'
+import type { Config, TemplateFunction, TemplateMap, TemplateOutput } from '../shared.ts'
 
-export default function (config) {
+const blogItem: TemplateFunction = (config: Config, templateMap: TemplateMap) => {
   const { basePath } = config;
   const postTags = config.tags?.split(', ') || [];
-  const tagToLink = (t) => `<a href="${basePath}/blog/tag/${stringToSlug(t)}/">${t}</a>`;
+  const tagToLink = (t: string): string => `<a href="${basePath}/blog/tag/${stringToSlug(t)}/">${t}</a>`;
   const tagLinks = postTags.map(tagToLink);
   const content = /* html */ `
 <article class="blog-item">
@@ -22,7 +23,7 @@ export default function (config) {
           : ''
       }
       <p class="date">
-        <span style="display: inline-block;">date published: ${config.date_published.split('T')[0]}</span>
+        <span style="display: inline-block;">date published: ${config.date_published?.split('T')[0]}</span>
         ${
           config.date_updated
             ? ' | <span style="display: inline-block;">date updated: ' + config.date_updated.split('T')[0] + '</span>'
@@ -31,11 +32,11 @@ export default function (config) {
       </p>
       <p class="author">
         <span class="author-name">author:</span>
-        <img class="author-avatar" src="${basePath}/images/${unwrapString(config.author_avatar)}" alt="" />
+        <img class="author-avatar" src="${basePath}/images/${unwrapString(config.author_avatar || '')}" alt="" />
         <span class="author-name">${config.author_name}</span>
       </p>
       <p class="cover">
-        <img src="${unwrapString(config.cover)}" alt="${config.title}" />
+        <img src="${unwrapString(config.cover || '')}" alt="${config.title}" />
       </p>
     </div>
     ${config.content}
@@ -45,5 +46,7 @@ export default function (config) {
   return basic({
     ...config,
     content,
-  });
+  }, templateMap);
 };
+
+export default blogItem;

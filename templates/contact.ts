@@ -1,6 +1,7 @@
-import basic from './basic.js';
+import type { Config, TemplateFunction, TemplateMap, TemplateOutput } from '../shared.ts';
+import basic from './basic.ts';
 
-export default function (config) {
+const contact: TemplateFunction = (config: Config, templateMap: TemplateMap) => {
   const { basePath } = config;
   return basic({
     ...config,
@@ -47,5 +48,7 @@ export default function (config) {
   </ul>
 </div>
 `
-  });
+  }, templateMap);
 };
+
+export default contact;
