@@ -740,10 +740,6 @@ footer a {
   padding-right: 8px;
   color: var(--grey-utility);
 }
-.faq-block,
-.content {
-    border-top: var(--border-style);
-}
 
 a.donate-button:hover,
 a.donate-button:focus {
@@ -831,7 +827,7 @@ a.donate-button:focus {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem !important;
 }
 .tags-nav a {
   display: inline-block;
