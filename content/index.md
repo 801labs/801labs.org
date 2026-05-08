@@ -1,6 +1,7 @@
 ---
 template: home
 title: Home
+description: 801 Labs is a *Salt Lake City* based hackerspace created by local information technology, electronics, and information security enthusiasts.
 ---
 
 # What is *801 Labs*?
@@ -9,7 +10,7 @@ title: Home
 
 ----
 
-## Sodar shares his robots, Cindy and Torchy
+#### Community highlight: Sodar shares his robots, Cindy and Torchy
 ##### set_parking_lot_on_fire.sh
 
 <div class="home-highlight">

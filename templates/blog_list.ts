@@ -3,7 +3,10 @@ import { readdir, writeFile } from 'node:fs/promises'
 import {
   readMarkdownWithFrontMatter,
   unwrapString,
-  stringToSlug
+  stringToSlug,
+  getTagLink,
+  DEFAULT_COVER_IMAGE,
+  getAuthorAvatarPath
 } from '../shared.ts'
 import type { Config, TemplateFunction, TemplateMap, TemplateOutput } from '../shared.ts'
 import basic from './basic.ts'
@@ -22,7 +25,6 @@ const blogList: TemplateFunction = async (config: Config, templateMap: TemplateM
   const scanResult = (await readdir(inputPath, {
     recursive: true
   }).catch(() => [])).filter(s => indexRegex.test(s))
-  const tagToLink = (t: string): string => `<a href="${basePath}/blog/tag/${stringToSlug(t)}/">${t}</a>`;
   const tags = new Set<string>();
 
   type PostPage = {
@@ -41,7 +43,10 @@ const blogList: TemplateFunction = async (config: Config, templateMap: TemplateM
     await Promise.all(scanResult.map(async item => {
       const {frontMatter} = await readMarkdownWithFrontMatter(inputPath, item)
       const linkRelative = normalize(`${item.replace(/index\.md$/, '')}`).replace(/\\/g, '/')
-      const sourcePath = normalize(`${inputPrefix}${pathRoot}${linkRelative}${unwrapString(frontMatter.cover || '')}`)
+      const unwrappedCover = unwrapString(frontMatter.cover || '');
+      const sourcePath = unwrappedCover
+        ? normalize(`${inputPrefix}${pathRoot}${linkRelative}${unwrappedCover}`)
+        : normalize(`${inputPrefix}${DEFAULT_COVER_IMAGE}`);
       const canvas = createCanvas(width, height)
       const ctx = canvas.getContext('2d')
       console.log('Generating thumbnail for:', sourcePath);
@@ -73,9 +78,9 @@ const blogList: TemplateFunction = async (config: Config, templateMap: TemplateM
   );
 
   const posts = postData.map(post => {
-      const { frontMatter, linkRelative, link, thumbnail, item } = post;
+      const { frontMatter, link, thumbnail } = post;
       const postTags = frontMatter.tags?.split(', ') || [];
-      const tagLinks = postTags.map((t: string)=>{tags.add(t); return t}).map(tagToLink);
+      const tagLinks = postTags.map((t: string)=>{tags.add(t); return t}).map((t) => getTagLink(t, basePath));
 
       const content = /* html */ `<article class="blog-item window">
         <div class="image">
@@ -98,7 +103,7 @@ const blogList: TemplateFunction = async (config: Config, templateMap: TemplateM
           <p class="date">date: ${frontMatter.date_published?.split('T')[0]}</p>
           <p class="author">
             <span class="author-name">author:</span>
-            <img class="author-avatar" src="${basePath}/images/${unwrapString(frontMatter.author_avatar || '')}" alt="" />
+            <img class="author-avatar" src="${basePath}/${getAuthorAvatarPath(frontMatter.author_avatar)}" alt="" />
             <span class="author-name">${frontMatter.author_name}</span>
           </p>
         </div>
@@ -126,7 +131,7 @@ const blogList: TemplateFunction = async (config: Config, templateMap: TemplateM
       .replaceAll(`"${basePath}`, `"${derivedBasePath}`)
     );
     const description = `Posts tagged: ${tag}`;
-    const tagToLinkWithActive = (t: string): string => `<a href="${derivedBasePath}/blog/tag/${stringToSlug(t)}/"${
+    const tagToLinkWithActive = (t: string): string => /* html */ `<a href="${derivedBasePath}/blog/tag/${stringToSlug(t)}/"${
       t === tag ? ' class="active"' : ''
     }>${t}</a>`;
     return {
@@ -151,7 +156,7 @@ const blogList: TemplateFunction = async (config: Config, templateMap: TemplateM
     ...config,
     content: /* html */`
       <div class="intro window">${config.content}</div>
-      <div class="intro window tags"><h2>Tags</h2><div class="tags-nav">${[...tags.keys()].map((t) => tagToLink(t)).join('\n')}</div></div>
+      <div class="intro window tags"><h2>Tags</h2><div class="tags-nav">${[...tags.keys()].map((t) => getTagLink(t, basePath)).join('\n')}</div></div>
       <div class="blog-list">
         ${posts.join('\n')}
       </div>

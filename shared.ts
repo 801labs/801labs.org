@@ -1,5 +1,11 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { join, basename, normalize } from 'node:path/posix';
+import { loadImage } from '@napi-rs/canvas';
+
+// export const SITE_URL = 'https://801labs.org';
+export const SITE_URL = 'https://admiralpotato.github.io/minimal_static_site_generator';
+export const DEFAULT_COVER_IMAGE = 'images/801labs_generic_opengraph_thumbnail.webp';
+export const SITE_LOGO = 'images/801labs_favicon.png';
 
 export type FrontMatter = {
   title?: string;
@@ -10,6 +16,7 @@ export type FrontMatter = {
   date_updated?: string;
   author_avatar?: string;
   author_name?: string;
+  og_type?: string;
   cover?: string;
   [key: string]: any;
 };
@@ -86,3 +93,30 @@ export const stringToSlug = (s: string): string => s
   .replace(/[^\w\s-]/g, '')
   .replace(/[\s_-]+/g, '-')
   .replace(/^-+|-+$/g, '');
+
+export const getCanonicalUrl = (path: string): string => {
+  let cleanPath = path.replace(/\\/g, '/');
+  if (cleanPath.endsWith('index.html')) {
+    cleanPath = cleanPath.substring(0, cleanPath.length - 'index.html'.length);
+  }
+  return `${SITE_URL}/${cleanPath}`;
+};
+
+export const getImageDimensions = async (imagePath: string) => {
+  try {
+    await stat(imagePath);
+    const image = await loadImage(imagePath);
+    return { width: image.width, height: image.height };
+  } catch (e) {
+    // console.error(`Failed to load image: ${imagePath}`, e);
+    return null;
+  }
+};
+
+export const getTagLink = (tag: string, basePath: string): string =>
+  /* html */ `<a href="${basePath}/blog/tag/${stringToSlug(tag)}/">${tag}</a>`;
+
+export const getAuthorAvatarPath = (avatar: string | undefined): string => {
+  if (!avatar) return '';
+  return `images/${unwrapString(avatar)}`;
+};

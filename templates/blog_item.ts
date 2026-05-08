@@ -1,12 +1,13 @@
 import basic from './basic.ts';
-import { stringToSlug, unwrapString } from '../shared.ts'
-import type { Config, TemplateFunction, TemplateMap, TemplateOutput } from '../shared.ts'
+import { getTagLink, unwrapString, DEFAULT_COVER_IMAGE, getAuthorAvatarPath } from '../shared.ts'
+import type { Config, TemplateFunction, TemplateMap } from '../shared.ts'
 
 const blogItem: TemplateFunction = (config: Config, templateMap: TemplateMap) => {
   const { basePath } = config;
   const postTags = config.tags?.split(', ') || [];
-  const tagToLink = (t: string): string => `<a href="${basePath}/blog/tag/${stringToSlug(t)}/">${t}</a>`;
-  const tagLinks = postTags.map(tagToLink);
+  const tagLinks = postTags.map((t: string) => getTagLink(t, basePath));
+  const coverSrc = config.cover ? unwrapString(config.cover) : `${basePath}/${DEFAULT_COVER_IMAGE}`;
+  const authorAvatar = `${basePath}/${getAuthorAvatarPath(config.author_avatar)}`;
   const content = /* html */ `
 <article class="blog-item">
   <div class="window">
@@ -32,11 +33,11 @@ const blogItem: TemplateFunction = (config: Config, templateMap: TemplateMap) =>
       </p>
       <p class="author">
         <span class="author-name">author:</span>
-        <img class="author-avatar" src="${basePath}/images/${unwrapString(config.author_avatar || '')}" alt="" />
+        <img class="author-avatar" src="${authorAvatar}" alt="${config.author_name}'s avatar" />
         <span class="author-name">${config.author_name}</span>
       </p>
       <p class="cover">
-        <img src="${unwrapString(config.cover || '')}" alt="${config.title}" />
+        <img src="${coverSrc}" alt="${config.title}" />
       </p>
     </div>
     ${config.content}
@@ -45,6 +46,7 @@ const blogItem: TemplateFunction = (config: Config, templateMap: TemplateMap) =>
 `;
   return basic({
     ...config,
+    og_type: 'article',
     content,
   }, templateMap);
 };
