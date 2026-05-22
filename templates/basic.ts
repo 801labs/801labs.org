@@ -8,11 +8,14 @@ const basic: TemplateFunction = async (config: Config, _templateMap: TemplateMap
   const {
     title,
     content,
-    basePath,
     description,
     derivedPages,
     cover,
   } = config;
+  let basePath = config.basePath;
+  if(title?.includes('404')) {
+    basePath = '';
+  }
 
   const canonicalUrl = getCanonicalUrl(path);
   const canonicalLogoUrl = getCanonicalUrl(SITE_LOGO);
