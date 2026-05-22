@@ -131,9 +131,12 @@ const blogList: TemplateFunction = async (config: Config, templateMap: TemplateM
       .replaceAll(`"${basePath}`, `"${derivedBasePath}`)
     );
     const description = `Posts tagged: ${tag}`;
-    const tagToLinkWithActive = (t: string): string => /* html */ `<a href="${derivedBasePath}/blog/tag/${stringToSlug(t)}/"${
-      t === tag ? ' class="active"' : ''
-    }>${t}</a>`;
+    const tagToLinkWithActive = (t: string): string => {
+        const s = stringToSlug(t);
+        return /* html */ `<a href="${derivedBasePath}/blog/tag/${s}/"${
+            s === slug ? ' class="active"' : ''
+        }>${t}</a>`
+    };
     return {
       ...config,
       template: 'basic',
@@ -145,7 +148,7 @@ const blogList: TemplateFunction = async (config: Config, templateMap: TemplateM
         <hr />
         <p>${description}</p>
       </div>
-      <div class="tags window"><h2>Tags</h2><div class="tags-nav">${[...tags.keys()].map(tagToLinkWithActive).join('\n')}</div></div>
+      <div class="intro window tags"><h2>Tags</h2><div class="tags-nav">${[...tags.keys()].map(tagToLinkWithActive).join('\n')}</div></div>
       <div class="blog-list">
         ${posts.join('\n')}
       </div>
