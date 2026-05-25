@@ -834,23 +834,35 @@ a.donate-button:focus {
   100% {background-color: var(--color-box-background-semitransparent);}
 }
 
-.contact-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 1rem;
+.contact-grid {}
+.contact-section {
+  margin: 1rem 0;
 }
 .contact-section iframe {
   display: block;
-  margin-top: 0.5rem;
-  filter: saturate(0.5) brightness(0.8);
+  margin-top: 1rem;
+}
+.google_maps {
+  filter: invert(100%);
+  flex-grow: 1;
+}
+.discord_widget {
+  flex-grow: 1;
 }
 @media (min-width: 720px) {
+  .contact-grid h2 {
+    line-height: 1.2;
+  }
   .contact-grid {
+    display: flex;
+    gap: 2rem;
     flex-direction: row;
   }
   .contact-section {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 }
 
