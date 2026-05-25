@@ -715,7 +715,38 @@ footer a {
   text-align: center; 
 }
 
-.window > h1:first-child::before {
+.large_buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.large_buttons .button {
+  display: block;
+  padding: 1rem 2rem;
+  border: var(--border-style);
+  border-radius: 0.5rem;
+  text-decoration: none;
+  text-align: center;
+  flex: 1;
+  min-width: 100%;
+  position: relative;
+}
+@media (min-width: 720px) {
+  .large_buttons .button {
+    min-width: 250px;
+  }
+}
+.large_buttons .button > span {
+  display: block;
+}
+.large_buttons .button .label {
+  font-size: 2em;
+  line-height: 2;
+}
+
+.window > h1:first-child::before,
+.large_buttons .button::before {
   display:block;
   top: 0;
   left: 0;
