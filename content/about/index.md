@@ -12,7 +12,7 @@ Our mission is to provide a space and a community for peer learning through work
 
 ## Organization
 
-801 labs is a non-profit organization run by its volunteers and overseen by a board of directors. Our bylaws and meeting minutes are available on our <a href="https://github.com/801labs/" target="_blank">GitHub page</a>.
+[801 labs is a non-profit organization](../nonprofit/) run by its volunteers and overseen by a board of directors. Our bylaws and meeting minutes are available on our <a href="https://github.com/801labs/" target="_blank">GitHub page</a>.
 
 While the board has the authority to make decisions for the organization, our volunteers run the day-to-day activities through committees. A list of committees along with their descriptions can be found on the getting involved page.
 

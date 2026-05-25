@@ -138,7 +138,7 @@ Examples of unacceptable behavior by participants include:
 
 If patron or guest feels uncomfortable, unsafe, or holds concerns about any activity or behavior within the 801 Labs community is enouraged any of the following:
 * Contact a Key Holding Officer or Board Member
-* Contact the Board, as a whole (board@801labs.org)
+* Contact the Board, as a whole ([board@801labs.org](mailto:board@801labs.org))
 * Privately reach out via [Discord direct message](https://discord.gg/uRSthurdPY) to any Key Holding Officer or Board Member
 
 ## Signatures
