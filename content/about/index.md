@@ -18,6 +18,8 @@ While the board has the authority to make decisions for the organization, our vo
 
 801 Labs is funded entirely by donations, which help us to pay for our rent and keep the space open and available to the community. Much of our equipment is donated by members of the community and other companies. These donations are essential for our continued existence, and any donations are welcome. Please visit our <a class="donate-button" href="/donate/">donation</a> page to learn more.
 
+Details about our [Financial Information can be found on this page](financial-information/).
+
 ## F.A.Q.
 
 ### Hacking is a broad topic, are there specific interests of 801labs?
