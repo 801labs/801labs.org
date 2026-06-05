@@ -331,7 +331,7 @@ h6 {
 }
 
 
-a {
+a[href] {
   color: var(--color-unclicked-link);
   text-underline-position: under;
   transition-duration: 0.25s;
@@ -339,9 +339,9 @@ a {
   transition-timing-function: ease-in-out;
 }
 
-a.active,
-a:hover,
-a:focus {
+a[href].active,
+a[href]:hover,
+a[href]:focus {
   color: var(--color-link-highlight);
 }
 

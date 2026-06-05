@@ -119,6 +119,7 @@ ${ description ? '    <meta name="description" content="' + description + '" /><
           <p>© 2024 801Labs.org. All rights reserved.</p>
           <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
           <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
           <p class="bottom-links">
             <a href="${basePath}/code-of-conduct/">Code of Conduct</a>
             <span>|</span>
