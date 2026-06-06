@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: Quirks in the Windows IPv6 address parsing and printing APIs</title>
+    <meta property="og:title" content="801 Labs: Quirks in the Windows IPv6 address parsing and printing APIs" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+    <meta name="description" content="Half of the world still lacks Internet access, but there are no IPv4 addresses left to hand out - which means that software libraries for IPv6 deserve scrutiny now." /><meta property="og:description" content="Half of the world still lacks Internet access, but there are no IPv4 addresses left to hand out - which means that software libraries for IPv6 deserve scrutiny now." />
+    <link rel="canonical" href="https://801labs.org/blog/post/quirks-in-the-windows-ipv6-address-parsing-and-printing-apis/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/quirks-in-the-windows-ipv6-address-parsing-and-printing-apis/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/quirks-in-the-windows-ipv6-address-parsing-and-printing-apis/ipv6_sticker.jpg" />
+    <meta property="og:image:width" content="2048" />
+    <meta property="og:image:height" content="1536" />
+    <meta property="article:author" content="Alex Henrie" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: Quirks in the Windows IPv6 address parsing and printing APIs</h1>
+    <div class="card-body">
+      <p class="description"><span>description:</span> Half of the world still lacks Internet access, but there are no IPv4 addresses left to hand out - which means that software libraries for IPv6 deserve scrutiny now.</p>
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/research/">research</a>, <a href="../../../blog/tag/windows-api/">WINDOWS API</a>, <a href="../../../blog/tag/ipv6/">IPv6</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2020-12-04</span>
+         | <span style="display: inline-block;">date updated: 2020-12-04</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/alexhenrie.png" alt="Alex Henrie's avatar" />
+        <span class="author-name">Alex Henrie</span>
+      </p>
+      <p class="cover">
+        <img src="ipv6_sticker.jpg" alt="Quirks in the Windows IPv6 address parsing and printing APIs" />
+      </p>
+    </div>
+    <p><a href="https://en.wikipedia.org/wiki/Global_Internet_usage#Internet_users">Half of the world still lacks Internet access</a>,
+but <a href="https://ipv4.potaroo.net/">there are no IPv4 addresses left to hand out</a>.
+On the other hand,
+<a href="https://www.google.com/intl/en/ipv6/statistics.html">33% of Google's customer base has a working IPv6 connection now</a>
+and
+<a href="https://www.zdnet.com/article/apple-tells-app-devs-to-use-ipv6-as-its-1-4-times-faster-than-ipv4/">Apple is pushing developers to switch just for the performance benefits</a>.
+It's clear that IPv6 will be increasingly important as time goes on, which means
+that software libraries for IPv6 deserve scrutiny now.</p>
+<p>Microsoft Windows has accumulated numerous API functions for converting IPv6
+addresses from text to binary (parsing) and from binary to text (printing),
+including:</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/iphlpapi/nf-iphlpapi-parsenetworkstring">iphlpapi.ParseNetworkString</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-inet_pton">ws2_32.inet_ntop</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-inetntopw">ws2_32.InetNtopW</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-inet_pton">ws2_32.inet_pton</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-inetptonw">ws2_32.InetPtonW</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsaaddresstostringa">ws2_32.WSAAddressToStringA</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsaaddresstostringw">ws2_32.WSAAddressToStringW</a></li>
+<li><a href="https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775098(v=vs.85)">urlmon.CreateUri</a>
+(string normalization only)</li>
+<li>dnsapi.DnsIpv6AddressToString (undocumented)</li>
+<li>dnsapi.DnsIpv6StringToAddress (undocumented)</li>
+</ul>
+<p>However, all of these functions behave identically to, and are surely built
+upon, the following:</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6addresstostringa">ntdll.RtlIpv6AddressToStringA</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6addresstostringw">ntdll.RtlIpv6AddressToStringW</a></li>
+<li>ntdll.RtlIpv6AddressToStringExA (not explicitly documented)</li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6addresstostringexw">ntdll.RtlIpv6AddressToStringExW</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6stringtoaddressa">ntdll.RtlIpv6StringToAddressA</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6stringtoaddressw">ntdll.RtlIpv6StringToAddressW</a></li>
+<li>ntdll.RtlIpv6StringToAddressExA (not explicitly documented)</li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/api/ip2string/nf-ip2string-rtlipv6stringtoaddressexw">ntdll.RtlIpv6StringToAddressExW</a></li>
+</ul>
+<p>The two RtlIpv6AddressToString functions only print plain IPv6 addresses. The
+<em>Ex</em> suffix in the RtlIpv6AddressToStringEx functions indicates that they were
+added later, and they can print addresses with or without a network interface
+number or port.</p>
+<p>Likewise, the RtlIpv6StringToAddress functions are older and can only parse
+plain IPv6 addresses. They report the <em>terminator</em> via a pointer argument, the
+terminator being the first unparsable character in the input string. The newer
+RtlIpv6StringToAddressEx functions can, in addition to parsing unadorned
+addresses, parse text that includes a network interface number or port.
+Furthermore, the Ex functions are more strict about what they accept than the
+originals: They do not report the terminator because they just return an error
+code if the address does not end at the end of the string.</p>
+<p>This year (2020), I
+<a href="https://source.winehq.org/git/wine.git/blob/bedfb9cae224a369efa4588332a5518dbee57035:/dlls/ntdll/rtl.c#l1091">implemented all eight of those ntdll functions for Wine</a>
+from scratch, knowing nothing about how the Windows implementations are coded. I
+tested millions of string inputs to determine exactly what counts as an IPv6
+address in Windows, and in the process found some interesting quirks that could
+lead to security vulnerabilities in Windows software.</p>
+<h2>RtlIpv6StringToAddress(Ex) might give you the wrong address</h2>
+<p>In a spec-conformant IPv6 address parser, a <code>::</code>
+<a href="https://tools.ietf.org/html/rfc4291#section-2.2">represents two or more bytes of zeros</a>.
+In the Windows APIs, this is only true if the double colon is in the middle or
+at the end of the address: If it comes at the beginning, it counts as at least
+four bytes of zeros. For example, if the address <code>::1</code> were written as
+<code>::0:0:0:0:0:0:0:1</code> (perfectly valid according to the spec),
+RtlIpv6StringToAddress reports that the terminator is the last <code>:</code> instead of
+the null terminator <code>\0</code> and it returns <code>STATUS_SUCCESS</code>.
+RtlIpv6StringToAddressEx is better because it returns the error code
+<code>STATUS_INVALID_PARAMETER</code> instead. Nevertheless, both functions fill the
+address buffer with the parsed address, minus two bytes at the end and plus two
+zero bytes at the beginning. In this example, the binary address that is stored
+will be <code>::</code> instead of <code>::1</code>. If the calling program does not check for errors
+thoroughly, this defect could expose sensitive data by causing server software
+to bind to <code>::</code> (all addresses) instead of <code>::1</code> (localhost only).</p>
+<p>The fact that Windows fails to parse some valid addresses is a compelling reason
+to avoid using the Windows IPv6 parsing APIs altogether, since differences
+between how IPv6 implementations output and interpret addresses can lead to
+software incompatibility. I felt that this was such a glaring problem that I
+wrote to Microsoft Security about it in January 2020, but because they did not
+consider it to be a significant security issue, it has yet to be fixed.</p>
+<h2>RtlIpv6AddressToString writes past the null terminator</h2>
+<p>RtlIpv6AddressToString always zeroes out the 46th character of the buffer, even
+though the longest possible normalized native IPv6 address is only 39
+characters:</p>
+<p><code>1111:2222:3333:4444:5555:6666:7777:8888</code></p>
+<p>If the input is an <a href="https://en.wikipedia.org/wiki/ISATAP">ISATAP</a> address
+(indicated by <code>0</code> or <code>200</code> in the fifth component and <code>5efe</code> in the sixth
+component), the longest possible normalized address increases to 44 characters
+in length, which is still one less than 45:</p>
+<p><code>1111:2222:3333:4444:200:5efe:255.255.255.255</code></p>
+<p>Overwriting the 46th character could cause a buffer overflow if the function is
+given an output buffer of less than 46 characters. The problem was fixed in
+RtlIpv6AddressToStringEx, which writes the minimum number of characters
+necessary.</p>
+<h2>RtlIpv6StringToAddress does not limit the length of the last component</h2>
+<p><a href="https://tools.ietf.org/html/rfc4291#section-2.2">An IPv6 address is invalid if any of its components are longer than four digits</a>
+(even if the extra digits are just leading zeros). And since IPv6 address
+components are hexadecimal by default, there's no prefix like <code>0x</code> to switch
+from decimal to hexadecimal. However, RtlIpv6AddressToString waives the length
+requirement for the last component if it is prefixed with <code>0x</code>, for example:</p>
+<p><code>::0x9999999999999999999999999999999999999999999999999999999999999999999999abcd</code></p>
+<p>No matter how long the last component is, if it starts with <code>0x</code> and contains
+only hexadecimal digits, the value is taken from the last four digits (<code>::abcd</code>
+in this example), the terminator is set to the <code>x</code>, and <code>STATUS_SUCCESS</code> is
+returned. This could result in a buffer overflow if an address that
+RtlIpv6AddressToString validates is assumed to be 45 characters or less and then
+copied to a 45-character buffer. The problem is more or less fixed in
+RtlIpv6StringToAddressEx, which returns <code>STATUS_INVALID_PARAMETER</code> if it
+encounters a <code>0x</code>, although it still parses and saves the value following the
+<code>0x</code> in the same way as RtlIpv6StringToAddress.</p>
+<h2>Best practices</h2>
+<p>With all of the above in mind, here's what I recommend:</p>
+<ul>
+<li>For the sake of interoperability, avoid the Windows IPv6 parsing APIs if
+possible. Use an external library such as
+<a href="https://github.com/jrepp/ipv6-parse">ipv6-parse</a> instead.</li>
+<li>If you do use the Windows IPv6 parsing or printing APIs, always use the Ex
+functions instead of the older ones.</li>
+<li>Check the return value of RtlIpv6StringToAddressEx for errors, even if you
+have already validated the IPv6 address with a spec-conformant parser.</li>
+</ul>
+<p>Happy coding! And if you're not already using <a href="https://www.winehq.org/">Wine</a>,
+be sure to check out the Wine 6.0 release (I'll be calling it &quot;Wine Vista&quot;)
+which is due out at the beginning of next year. Apart from improved IPv6
+support, compatibility with popular Windows software has taken an enormous step
+forward since Wine 5.0 thanks to an overhauled software architecture and tighter
+integration with MinGW.</p>
+<p>Photo credit:
+<a href="https://www.flickr.com/photos/philwolff/5557354098/in/photolist-9t5TKY-jKi9BZ-reZriP-csBi4j-bozscb-5XWDVu-8qdoiy-9GWxX7-cc8j1J-ost5VM-cj45H5-7FQyVD-5XWDVm-58Zu4e-nQ4nF5-nxHJA4-d8vfpA-nxHH9r-8qdobj-9TExeZ-bvov6x-5NtZnq-7yQMwe-cCjXzo-4qQ54q-48dbjJ-23s1XwA-GxGQpg-brFDWM-bdQpKT-bdPJ1F-brEEDH-2h3Jv9-c2pZVE-bdQgai-nEho6E-9UfTM8-bdQ3N4-6QdWkz-aousCH-kwkHqE-bdQeyz-brEEzR-9QT9bn-9THsMQ-bdQ6Xa-bdQaA4-brFJoP-bdPQki-bdPM64">Phil Wolff</a></p>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

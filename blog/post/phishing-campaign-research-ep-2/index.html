@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: Phishing/Scam campaign research (ep. 2)</title>
+    <meta property="og:title" content="801 Labs: Phishing/Scam campaign research (ep. 2)" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+    <meta name="description" content="I got another email. This one was interesting, the email was the standard "we had a rat on your computer that we used to take dirty pictures of you, give us money or we will  send it to all your contacts"." /><meta property="og:description" content="I got another email. This one was interesting, the email was the standard "we had a rat on your computer that we used to take dirty pictures of you, give us money or we will  send it to all your contacts"." />
+    <link rel="canonical" href="https://801labs.org/blog/post/phishing-campaign-research-ep-2/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/phishing-campaign-research-ep-2/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/phishing-campaign-research-ep-2/chrome_2018-11-14_11-31-28.png" />
+    <meta property="og:image:width" content="1231" />
+    <meta property="og:image:height" content="869" />
+    <meta property="article:author" content="Pips" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: Phishing/Scam campaign research (ep. 2)</h1>
+    <div class="card-body">
+      <p class="description"><span>description:</span> I got another email. This one was interesting, the email was the standard "we had a rat on your computer that we used to take dirty pictures of you, give us money or we will  send it to all your contacts".</p>
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/research/">research</a>, <a href="../../../blog/tag/phishing/">phishing</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2018-10-31</span>
+         | <span style="display: inline-block;">date updated: 2018-11-15</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/pips.jpg" alt="Pips's avatar" />
+        <span class="author-name">Pips</span>
+      </p>
+      <p class="cover">
+        <img src="chrome_2018-11-14_11-31-28.png" alt="Phishing/Scam campaign research (ep. 2)" />
+      </p>
+    </div>
+    <p>I got another email. This one was interesting, the email was the standard &quot;we
+had a rat on your computer that we used to take dirty pictures of you, give us
+money or we will send it to all your contacts&quot;.</p>
+<p>This is the email that I received.</p>
+<p><img src="image-17.png" alt="" title="The scam email"></p>
+<p>It's a fairly standard &quot;give us money or we send dirty photos we took to your
+contacts&quot; kind of scam email, but this one actually does something that I have
+not seen previously. The scammers establish &quot;credibility&quot; by actually telling
+you what your password is. The scammers purchased a dumped site database (that
+assumedly did not hash or salt passwords), correlated the email address in the
+DB, and sent out an email.</p>
+<p>This scam is incredibly effective when you consider that a vast majority of
+people use the same password for every account.</p>
+<p>This scam also does something unique; they spoofed the sender of this email to
+be me.</p>
+<pre><code>Delivered-To: hello@[redacted]
+Received-SPF: none (zoho.com: 171.99.132.162 is neither permitted nor denied by domain of [redacted]) client-ip=171.99.132.162; envelope-from=hello@[redacted]; helo=171-99-132-162.static.asianet.co.th;
+Authentication-Results: mx.zohomail.com;
+    spf=none (zoho.com: 171.99.132.162 is neither permitted nor denied by domain of [redacted])  smtp.mailfrom=hello@[redacted]
+Received: from 171-99-132-162.static.asianet.co.th (171-99-132-162.static.asianet.co.th [171.99.132.162]) by mx.zohomail.com
+    with SMTP id [redacted]; Mon, 29 Oct 2018 19:47:47 -0700 (PDT)
+</code></pre>
+<p>This was an interesting way of finding out that my mail server has incorrectly
+configured SPF records. This establishes <s>darknet spooky hacker credibility</s>
+by sending an email as you.</p>
+<p>I am going to take a shot in the dark that they try several different techniques
+to do this. The first, is just standard SPF record spoofing to send the message.
+Since the boilerplate message contains
+<code>Please don't try to contact me or find me, it is impossible, since I sent you an email from your email account.</code>,
+I am going to assume that sending mail as the recipient is part of the scam in
+general.</p>
+<p>I also have another theory, that when they send the mail, if SPF records prevent
+spoofing, that they then try to authenticate with the target mail server to
+craft the email using the harvested credentials. This would also prove to the
+scammers if the harvested credentials were valid. This is a technique that has
+been seen in the wild in previous phishing campaigns, talked about
+<a href="../phishing-campaign-research/">here</a>.</p>
+<p>Digging a little deeper and looking at the email headers above, the IP that sent
+the email is <code>171.99.132.162</code>. This IP appears to be a standard telecom IP
+address, belonging to a Broadband ISP located out of Bangkok, Thailand.</p>
+<p><img src="image.png" alt=""></p>
+<p>Riskiq also only has two carrier-assigned DNS records for this IP address</p>
+<p><img src="image-1.jpg" alt=""></p>
+<p>It appears that this IP is for sure a private (possibly residential IP). Is this
+IP the actual IP of the scammer? I hope they they wouldn't be so dumb, but who
+knows. Lets poke at it on <a href="https://www.shodan.io">Shodan</a>.</p>
+<p><img src="image-2.png" alt=""></p>
+<p>The only running service on this host is a web server. Ohhh boy, that's great.
+Since there was no DNS record for a TLD pointing towards this IP, it's safe to
+assume that it is a residential/business host that opened up a web server for
+something, or the scammer is running this from their home IP and has a web
+server running. Lets see whats on it.</p>
+<p><img src="image-3.jpg" alt=""></p>
+<p>It appears this IP address is hosting a Hikvision camera control panel. Cameras
+are the number one compromised host for botnets or malicious activity on the
+internet. It's easy to assume that the person hosting this publicly accessible
+camera control panel left it with default passwords, and somebody logged in and
+compromised one of the cameras, adding it to a botnet.</p>
+<p>Aside from trying to log in (illegal) there's nothing more I can do for this
+research. :(</p>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

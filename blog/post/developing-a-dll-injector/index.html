@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: DLL injection - Developing a simple injector.</title>
+    <meta property="og:title" content="801 Labs: DLL injection - Developing a simple injector." />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+
+    <link rel="canonical" href="https://801labs.org/blog/post/developing-a-dll-injector/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/developing-a-dll-injector/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/developing-a-dll-injector/process-explorer-test-dll-injection-success.png" />
+    <meta property="og:image:width" content="787" />
+    <meta property="og:image:height" content="586" />
+    <meta property="article:author" content="th3v0id" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: DLL injection - Developing a simple injector.</h1>
+    <div class="card-body">
+      
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/how-to/">how to</a>, <a href="../../../blog/tag/dll-injection/">DLL Injection</a>, <a href="../../../blog/tag/windows-hacking/">Windows Hacking</a>, <a href="../../../blog/tag/development/">Development</a>, <a href="../../../blog/tag/memory/">memory</a>, <a href="../../../blog/tag/windows-api/">Windows API</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2019-02-07</span>
+         | <span style="display: inline-block;">date updated: 2019-07-11</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/th3v0id.jpg" alt="th3v0id's avatar" />
+        <span class="author-name">th3v0id</span>
+      </p>
+      <p class="cover">
+        <img src="process-explorer-test-dll-injection-success.png" alt="DLL injection - Developing a simple injector." />
+      </p>
+    </div>
+    <p><a href="https://en.wikipedia.org/wiki/DLL_injection">DLL injection</a> is the process of
+forcing a running process to load a DLL (Dynamically Linked Library) of your
+choice. In this write-up, I'll walk you through the LoadLibraryA injection
+method. This causes the DLL to be loaded into the context of the process thus
+allowing us to execute our own code inside of the process's virtual memory
+space.</p>
+<pre><code>I assume there is a base understanding of what a DLL is. By the end of this write-up, we'll have a functional DLL injector along with a bare-bone test DLL which we'll use for testing during development.
+
+Writing a DLL injector is pretty trivial and only requires a handful steps. Remember that DLLs are specific to Windows and there-for we'll be utilizing functions provided to us by the Windows API. The steps required for the task at hand are in order as follows:
+</code></pre>
+<ol>
+<li>
+<p>Acquire a handle to the remote process that you want to inject / load your
+DLL into. We do this by prompting for a process ID (PID) after displaying a
+list of processes w/ their PIDs.</p>
+<p>// Get the remote target pid uint16_t target_pid = get_target_pid();</p>
+<p>if (!target_pid) { std::cerr &lt;&lt; &quot;Getting remote target process ID failed...&quot;
+&lt;&lt; std::endl; return 1; }</p>
+<p>// <snipped> ...</p>
+<p>// Obtain a handle to the target remote process. HANDLE target_process =
+OpenProcess(PROCESS_ALL_ACCESS, FALSE, target_pid);</p>
+<p>if (target_process == NULL) { std::cerr &lt;&lt; &quot;Acquiring a handle to the remote
+target process failed...&quot; &lt;&lt; std::endl; return -1; }</p>
+</li>
+</ol>
+<p><em>get_target_pid() function:</em></p>
+<pre><code>uint16_t get_target_pid() {
+	uint16_t pid = 0;
+	
+	std::string pid_str;
+	bool first_input_entered = false;
+
+	do {
+		if (first_input_entered) {
+			system(&quot;cls&quot;);
+			print_banner();
+			std::cerr &lt;&lt; &quot;The given process ID is invalid, try again...&quot; &lt;&lt; std::endl;
+		}
+
+		print_process_list();
+
+		std::cout &lt;&lt; &quot;\nEnter target process ID: &quot;;
+		std::getline(std::cin, pid_str);
+
+		if (first_input_entered == false) {
+			first_input_entered = true;
+		}
+
+		if (pid_str == &quot;exit&quot; ||
+			pid_str == &quot;quit&quot;) {
+			break;
+		}
+
+	} while (file_exists(pid_str) == false &amp;&amp; !pid_str.size());
+
+	if (pid_str != &quot;exit&quot; &amp;&amp;
+		pid_str != &quot;quit&quot;) {
+		pid = (uint16_t)std::stoi(pid_str);
+	}
+
+	return pid;
+}
+</code></pre>
+<ol start="2">
+<li>
+<p>Create and store the DLL's absolute path in a variable.</p>
+<p>// Get the dll's path that we want to inject into our remote target process.
+std::string dll_path = get_dll_path();</p>
+<p>std::cout &lt;&lt; &quot;DLL path: &quot; &lt;&lt; dll_path &lt;&lt; std::endl;</p>
+</li>
+</ol>
+<p><em>get_dll_path() function:</em></p>
+<pre><code>std::string get_dll_path() {
+
+	std::string dll_path;
+	bool first_input_entered = false;
+
+	do {
+		if (first_input_entered) {
+			system(&quot;cls&quot;);
+			print_banner();
+			std::cerr &lt;&lt; &quot;Specified DLL path was invalid, try again...&quot; &lt;&lt; std::endl;
+		}
+
+		std::cout &lt;&lt; &quot;Enter path to DLL: &quot;;
+		std::getline(std::cin, dll_path);
+
+		if (first_input_entered == false) {
+			first_input_entered = true;
+		}
+
+		if (dll_path == &quot;exit&quot; ||
+			dll_path == &quot;quit&quot;) {
+			break;
+		}
+
+	} while (file_exists(dll_path) == false);
+
+	return dll_path;
+}
+</code></pre>
+<ol start="3">
+<li>
+<p>Now we need to allocate enough space in the remote process to store the DLLs
+absolute path. We achieve this by using Window's
+<a href="https://docs.microsoft.com/en-us/windows/desktop/api/memoryapi/nf-memoryapi-virtualallocex">VirtualAllocEx</a>
+function.</p>
+<p>// Allocate space for our DLL path inside the target remote process. LPVOID
+dll_path_in_remote_mem_addr = VirtualAllocEx( target_process, NULL,
+_MAX_PATH, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE );</p>
+<p>if (dll_path_in_remote_mem_addr == NULL) { std::cerr &lt;&lt; &quot;Allocating space for
+our DLL path in the remote target process's virtual memory space failed...&quot;
+&lt;&lt; std::endl; CloseHandle(target_process); return 1; }</p>
+<p>std::cout &lt;&lt; &quot;DLL allocation memory address: &quot; &lt;&lt;
+&amp;dll_path_in_remote_mem_addr &lt;&lt; std::endl;</p>
+</li>
+<li>
+<p>And now that we've allocated and reserved enough memory for the DLL path, we
+can write it into that region of memory of the remote process using the
+Window's
+<a href="https://docs.microsoft.com/en-us/windows/desktop/api/memoryapi/nf-memoryapi-writeprocessmemory">WriteProcessMemory</a>
+function.</p>
+<p>// Copy the DLL path into the allocated memory region. bool write_status =
+WriteProcessMemory( target_process, dll_path_in_remote_mem_addr,
+dll_path.c_str(), strlen(dll_path.c_str()), NULL );</p>
+<p>std::cout &lt;&lt; &quot;WriteProcessMemory was &quot; &lt;&lt; (write_status ? &quot;successful!&quot; :
+&quot;unsuccessful...&quot;) &lt;&lt; std::endl;;</p>
+<p>if (!write_status) { std::cerr &lt;&lt; &quot;GetLastError() for failed
+WriteProcessMemory() call: &quot; &lt;&lt; GetLastError() &lt;&lt; std::endl;
+CloseHandle(target_process); return 1; }</p>
+</li>
+<li>
+<p>Next, we'll need to obtain the address to the Window's
+<a href="https://docs.microsoft.com/en-us/windows/desktop/api/libloaderapi/nf-libloaderapi-loadlibrarya">LoadLibraryA</a>
+function. This is easily done through the Window's
+<a href="https://docs.microsoft.com/en-us/windows/desktop/api/libloaderapi/nf-libloaderapi-getprocaddress">GetProcAddress</a>
+function.</p>
+<p>// Get the address to the LoadLibraryA Windows API function. LPVOID
+load_library_addr = (LPVOID)GetProcAddress( GetModuleHandle(&quot;kernel32.dll&quot;),
+&quot;LoadLibraryA&quot; );</p>
+<p>if (load_library_addr == NULL) { std::cerr &lt;&lt; &quot;GetProcAddress failed...&quot; &lt;&lt;
+std::endl; CloseHandle(target_process); return 1; }</p>
+<p>std::cout &lt;&lt; &quot;LoadLibraryA address: &quot; &lt;&lt; &amp;load_library_addr &lt;&lt; std::endl;</p>
+</li>
+<li>
+<p>Create a remote thread via
+<a href="https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-createremotethread">CreateRemoteThread</a>
+and pass the handle we have on the remote process, the address to
+LoadLibraryA, and the memory address that our DLL path resides at.
+LoadLibraryA will be invoked and passed <code>dll_path_in_remote_mem_addr</code> by our
+call to CreateRemoteThread. This is where the magic happens and our DLL is
+loaded into the process.</p>
+<p>// Create our remote thread for running our DLL code. HANDLE remote_thread =
+CreateRemoteThread( target_process, NULL, NULL,
+(LPTHREAD_START_ROUTINE)load_library_addr, dll_path_in_remote_mem_addr, NULL,
+NULL );</p>
+<p>if (remote_thread == NULL) { std::cerr &lt;&lt; &quot;CreateRemoteThread failed...&quot; &lt;&lt;
+std::endl; return 1; }</p>
+<p>std::cout &lt;&lt; &quot;Remote thread address: &quot; &lt;&lt; &amp;remote_thread &lt;&lt; std::endl;</p>
+</li>
+<li>
+<p>The last thing we do is deallocate the memory that was reserved for our DLL
+path using
+<a href="https://docs.microsoft.com/en-us/windows/desktop/api/memoryapi/nf-memoryapi-virtualfreeex">VirtualFreeEx</a>
+and then close our open handles using
+<a href="https://docs.microsoft.com/en-us/windows/desktop/api/handleapi/nf-handleapi-closehandle">CloseHandle</a>.</p>
+<p>// Release the allocated memory we acquired from the remote process. if
+(VirtualFreeEx(target_process, dll_path_in_remote_mem_addr, 0, MEM_RELEASE)
+== 0) { std::cerr &lt;&lt; &quot;VirtualFreeEx failed on target process...&quot; &lt;&lt;
+std::endl; }</p>
+<p>// Free our handle on the remote thread CloseHandle(remote_thread);</p>
+<p>// Free our handle on the remote process CloseHandle(target_process);</p>
+</li>
+</ol>
+<p>Tying our code together and testing it out ~ we run <code>.\InjectDLL.exe</code>, then
+enter the remote target PID, and finally the absolute path to <code>TestDLL.dll</code>. Our
+executable outputs some information about the injection indicating it was
+successful.</p>
+<p><img src="2019-05-02-090559_3440x1440_scrot.png" alt="" title="Successful execution of our DLL injector"></p>
+<p>Our injector indicated it was successful, but we can double check with Window's
+<a href="https://docs.microsoft.com/en-us/sysinternals/downloads/process-explorer">Process Explorer</a>.
+After installing it (if you don't have it installed already) we launch it, make
+sure the lower pane is visible by toggling it on. This can be achieved by
+checking the <code>View -&gt; Show Lower Pane</code> option. Then, select the remote target
+process in the list and press the key combination <code>Ctrl + d</code>. You should now see
+a list of loaded DLLs. One of which is our DLL!</p>
+<p><img src="process-explorer-test-dll-injection-success.png" alt="" title="Using Process Explorer, we can see that our TestDLL.dll file was injected into Game.exe successfully."></p>
+<p>Once we have successfully loaded our DLL into the target process, we can access
+and reference anything within it's virtual memory space. In part 2, I'll
+demonstrate an example use case of DLL injection by showing how we can find an
+in-memory data structure (i.e. the offset to a player structure / class in a
+game).</p>
+<p>The full source code for both the DLL injector and the Test DLL can be found in
+this <a href="https://github.com/selftaught/DLLinjector">Github</a> repository.</p>
+<p>Thanks for reading through this article! If you notice any issues in the
+write-up or code - please don't hesitate to message me! You can do so via
+<a href="https://keybase.io/th3v0id">keybase</a> or <a href="https://twitter.com/x74x76">twitter</a>.</p>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

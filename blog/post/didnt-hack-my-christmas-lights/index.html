@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: i didn't hack my christmas tree lights</title>
+    <meta property="og:title" content="801 Labs: i didn't hack my christmas tree lights" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+
+    <link rel="canonical" href="https://801labs.org/blog/post/didnt-hack-my-christmas-lights/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/didnt-hack-my-christmas-lights/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/didnt-hack-my-christmas-lights/A7B65125-AF02-44C0-8FBF-0D2D0236161F-1.jpg" />
+    <meta property="og:image:width" content="2000" />
+    <meta property="og:image:height" content="2667" />
+    <meta property="article:author" content="kimb3r" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: i didn't hack my christmas tree lights</h1>
+    <div class="card-body">
+      
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/research/">research</a>, <a href="../../../blog/tag/networking/">networking</a>, <a href="../../../blog/tag/iot/">IOT</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2018-12-27</span>
+         | <span style="display: inline-block;">date updated: 2018-12-27</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/kimb3r.jpg" alt="kimb3r's avatar" />
+        <span class="author-name">kimb3r</span>
+      </p>
+      <p class="cover">
+        <img src="A7B65125-AF02-44C0-8FBF-0D2D0236161F-1.jpg" alt="i didn't hack my christmas tree lights" />
+      </p>
+    </div>
+    <p>Sometimes you go to Target and fall in love with the most stupid and useless yet
+incredibly cool product you could buy with the spare $100 you don't really have
+and sometimes you are even lucky enough to find a product that:</p>
+<ol>
+<li>lights up</li>
+<li>is connected to the internet</li>
+</ol>
+<p>which personally are my two favorite things. Oh, and it's Christmastime?? Enter
+the Philips Illuminate Starter Kit of 25 C9-sized LED lights.</p>
+<p>While many wi-fi app controlled LED lights come in LED light strip form, these
+lights in particular come attached to each other on a typical Christmas light
+string setup, but at the end of the cord about a foot from the plug is a green
+control box. 25 lights isn't really enough to make a standard Christmas tree
+look good, so I bought some supplemental lights and hooked these babies up then
+got them connected to my wifi ASAP. You can buy additional Philips Illuminate
+branded extension light strings to hook up to your main strand, which maxes out
+at 300 lights per control box.</p>
+<p><img src="IMG_3415.jpg" alt="" title="a mix of birbs, the colored Philips lights, and a strand of normal lights. note the green control box to the bottom left"></p>
+<p>In order to connect to your Philips Illuminate lights, you download the
+Illuminate app, connect to the wifi the control box emanates, and provide the
+control box with the login to your home wifi. Once you hook the control box up
+to your home wifi, everything is all set for app control. The app can do A Bunch
+of Cool Things, including a huge amount of pre-programmed light patterns, the
+ability to make your own custom patterns, and a mode where the lights react to
+your voice... super creepy but great for the cool trick factor.</p>
+<p>The ease of this all means the lights are absolutely worth the sale price of
+$79.99 (originally $99.99!), right? But it'd be nice to get them to do a little
+more, or at least be able to deconstruct how they work. After running through
+the programs available on the app, creating my own programs on the app, and
+poking around to see if anybody had created a custom firmware for these yet, I
+got to the point where I started getting a bit more curious about the security
+of the Philips Illuminate light set.</p>
+<p>First of all, if these things are on my wifi network, they've got to have an IP
+address and my particular starting point for poking at things on my network is
+to do an nmap scan:</p>
+<p><img src="image-19.jpg" alt=""></p>
+<p>Choose whatever nmap scan you want, but this one hits all the ports tcp and udp
+so you can get a general idea of what the network functions of this device are.
+From this scan, I've got the easily recognizable port 80 which indicates we can
+browse to http://192.168.50.37 on my home network and see what's up there. I
+also see a pretty neat option with port 5577, which led me down a huge rabbit
+hole. I've never messed with smart home devices before, but apparently port 5577
+is a standard control port for issuing commands to networked LED devices with a
+certain set of controllers. In the UDP zone, there's port 53!! Is this thing
+running a DNS server? There's also those various high level UDP ports which
+could offer up some interesting information.</p>
+<p>In the interest of keeping things simple, I started with the port 80 web
+interface. By browsing to the IP address, I got a login prompt where I tried
+every different formulation of admin/admin, admin/password, root/[blank]...
+nothing.</p>
+<p><img src="Screen-Shot-2018-12-26-at-10.24.57-AM.jpg" alt="" title="a challenge"></p>
+<p>Also note the truly beautiful shade of pink you get upon failed login... the
+kind of pink that makes you want to attempt more.</p>
+<p><img src="Screen-Shot-2018-12-26-at-10.29.47-AM.jpg" alt="" title="heck."></p>
+<p>At this point I was pretty okay with trying anything I could to get into what I
+assumed was a web interface to change settings with the lights. Following
+t<a href="https://support.portswigger.net/customer/portal/articles/1964020-using-burp-to-brute-force-a-login-page">his</a>
+article about using Burp to brute force a login page yielded no results.
+<a href="http://tylerrockwell.github.io/defeating-basic-auth-with-hydra/">This</a> article
+about using Hydra to brute force a login page... <strong>also</strong> yielded no results.
+Double heck!</p>
+<p><em><strong>NOTE:</strong></em> Both of the brute force options would have worked if I had a certain
+reversed common username in any of the wordlists I used... remember to use good
+wordlists, pals. But I didn't, so I carried on.</p>
+<p>The next thing I wanted to try was getting a PCAP of the app issuing commands to
+the lights, because maybe the password would be visible over the wire! At this
+point I was mistakenly assuming that the app was issuing API calls over port 80
+via authenticated HTTP at the very least. I didn't have an easy way right off
+the bat to grab a PCAP, so I turned to asking people around me what they'd do
+next. We ended up decompiling the Philips Illuminate APK to try and find the
+password. It was a really great way to get a crash course in Android app
+development, but didn't yield any results HTTP login password-wise. I did get a
+bit more information about these lights though: the original developer is a
+company called Zengge and also got some model information from examining the
+APK. I wasn't right about the HTTP posts for the control of the lights, so on to
+the next option.</p>
+<p>Doing more research about port 5577 gave me the confirmation that it was time to
+put these things on an isolated test network just to be able to make sure
+nothing else was messing with them and snatch a pcap of opening my app and
+issuing a series of on-off commands:</p>
+<p><img src="Screen-Shot-2018-12-25-at-4.13.02-PM.jpg" alt="" title="things happening over port 5577!!"></p>
+<p>and look! Confirmation that commands are indeed issued over port 5577. But how
+can you confirm for absolutely certain that it's not just random chatter? Follow
+the streams:</p>
+<p><img src="Screen-Shot-2018-12-25-at-4.26.26-PM.jpg" alt="" title="Repetitive commands being issued! Hooray!"></p>
+<p>That's what a series of on-off commands looks like, and here's what a series of
+switching between the two custom programs I made on the app look like:</p>
+<p><img src="Screen-Shot-2018-12-25-at-4.36.31-PM.png" alt="" title="a bit more complex"></p>
+<p>So as you can see, a bit more complicated when you get into the fancy settings
+like color changes and fade speeds. When looking through the pcaps for different
+kinds of requests, there's not a whole bunch more information beyond the promise
+of the ability to issue totally unauthenticated commands. This makes it
+unnecessary to have the HTTP page login for the purposes of controlling the
+lights without the app, but I was still really interested in finding the
+password. What was that terrible pink 404 error hiding?</p>
+<p>Our next port to explore was confirmed as the one interesting artifact I found
+in the PCAPs I took: this controller randomly spits out the either the ip
+address, hostname, mac address in a string or every so often a string of
+&quot;HF-A11ASSISTHREAD&quot; over UDP on port 48899.</p>
+<p><img src="Screen-Shot-2018-12-26-at-1.46.48-PM.png" alt="" title="a friendly network device"></p>
+<p>This didn't correspond with any hostnames, so I immediately threw it into Google
+and found out some excellent information about the Zengge Lightbulb
+manufacturing company thanks to
+<a href="https://github.com/vikstrous/zengge-lightcontrol">vikstrous on Github</a>. This
+source not only gave me some insight onto what's going on with this magical box
+and lights, but also the admin/password to login to the web interface (finally)!</p>
+<p>What is going on here anyways? What we know at this point is that there's 25
+LEDs controlled by a control box. The control box has a wifi card in it which
+has the ability to not only broadcast but also connect to a wifi network. This
+card also runs a UART (Universal Asynchronous Receiver/Transmitter) that accepts
+commands over port 5577. The mysterious port 48899 is the ability to control
+some options for the device, but lucky for me the default HTTP login found on
+the internet for the device works!</p>
+<p><img src="Screen-Shot-2018-12-25-at-5.37.14-PM.jpg" alt="" title="Answers!"></p>
+<p>Here is where we can configure some cool information about the device's settings
+for sending and receiving commands, but honestly I'm not even going to touch it
+– since what I was really hoping for was a web interface to control the lights
+themselves, not really the device that controls communication to them.</p>
+<p>An additional part of this adventure that doesn't really fit into the rest of
+the research is that Philips is just the distributor for this product which is
+made by Seasonal Specialties, a company founded in 1996.
+<a href="http://www.seasonalspecialties.com">Seasonal Specialities</a> has a website that
+was created in Microsoft Frontpage 5.0 but also a
+<a href="http://www.seasonalspecialties.com/wp/wp-login.php">wordpress with a default login page</a>
+operating on the same web host. Yikes. These details tell me security isn't
+exactly a major concern at Seasonal Specialities, yet these lights are a really
+nicely made product so I would like to tell them to please start caring! If you
+go through all of the trouble to rebrand the Zenegge light parts into something
+that becomes a well-constructed nicely working set of Christmas lights, why not
+go the extra mile and figure out how to cover up their lack of security?</p>
+<p>Luckily, I've got what I need to start creating the foundation for controlling
+the lights without the Philips Illuminate app. I have a model of UART Controller
+and lights, I know that the commands aren't sent with any authentication, and I
+could conceivably find a way to send commands via my Raspberry Pi or create my
+own web interface for their control. Simply telnetting to port 5577 and
+repeating the same strings observed in the PCAP back at the device doesn't
+really work... So now it's just a matter of finding out what packages are out
+there to interact with this controller or building my own. I'm also tempted to
+see if any of the <a href="https://www.openhab.org/addons/bindings/wifiled/">OpenHab</a>
+extensions can play nice with these lights. Either way, I haven't really hacked
+my Christmas lights, I just found out a TON of information about how they work
+and function. The true hack will come when I find a way to make them work
+without their intended supporting software.</p>
+<p>Thanks to some sources:</p>
+<p><a href="https://www.jpelectron.com/sample/Electronics/WiFi%20LED%20control/">https://www.jpelectron.com/sample/Electronics/WiFi%20LED%20control/</a></p>
+<p><a href="https://github.com/renebohne/wifirgbcontroller">https://github.com/renebohne/wifirgbcontroller</a></p>
+<p><a href="https://www.openhab.org/addons/bindings/wifiled/">https://www.openhab.org/addons/bindings/wifiled/</a></p>
+<p><a href="https://github.com/vikstrous/zengge-lightcontrol">https://github.com/vikstrous/zengge-lightcontrol</a></p>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

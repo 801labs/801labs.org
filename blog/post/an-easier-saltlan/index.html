@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: An easier SaltLAN</title>
+    <meta property="og:title" content="801 Labs: An easier SaltLAN" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+    <meta name="description" content="My family does an annual LAN Party and one of the biggest complaints we have is that Steam takes ages to download for everyone." /><meta property="og:description" content="My family does an annual LAN Party and one of the biggest complaints we have is that Steam takes ages to download for everyone." />
+    <link rel="canonical" href="https://801labs.org/blog/post/an-easier-saltlan/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/an-easier-saltlan/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/an-easier-saltlan/image-12.jpg" />
+    <meta property="og:image:width" content="1141" />
+    <meta property="og:image:height" content="472" />
+    <meta property="article:author" content="bashNinja" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: An easier SaltLAN</h1>
+    <div class="card-body">
+      <p class="description"><span>description:</span> My family does an annual LAN Party and one of the biggest complaints we have is that Steam takes ages to download for everyone.</p>
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/how-to/">how to</a>, <a href="../../../blog/tag/tutorial/">tutorial</a>, <a href="../../../blog/tag/networking/">networking</a>, <a href="../../../blog/tag/gaming/">gaming</a>, <a href="../../../blog/tag/docker/">Docker</a>, <a href="../../../blog/tag/steam/">Steam</a>, <a href="../../../blog/tag/dns/">DNS</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2018-11-28</span>
+         | <span style="display: inline-block;">date updated: 2018-11-28</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/bashNinja.jpeg" alt="bashNinja's avatar" />
+        <span class="author-name">bashNinja</span>
+      </p>
+      <p class="cover">
+        <img src="image-12.jpg" alt="An easier SaltLAN" />
+      </p>
+    </div>
+    <p>My family does an annual LAN Party and one of the biggest complaints we have is
+that Steam takes ages to download for everyone.</p>
+<p>This year things are going to be different. I want to follow in the footsteps of
+SaltLAN and setup some caching. As this progressed, I spiced things up with my
+own flare and thought I would share.</p>
+<p>The primary guide I followed was:
+<a href="https://github.com/SaltLAN/Configuration/blob/master/SETUP.md">https://github.com/SaltLAN/Configuration/blob/master/SETUP.md</a>
+done by <a href="https://twitter.com/pips801">@Pips801</a>.</p>
+<h3>Step 1 - Get a Server</h3>
+<p>I have a server I use for various projects and environments. SuperMicro E300-8D
+You can read about a similar setup on a fellow 801Labs member's blog at:
+<a href="https://securedumby.science/view-post/dumbyland_beginning_">https://securedumby.science/view-post/dumbyland_beginning_</a></p>
+<h3>Step 2 - Install a VM</h3>
+<p>I am installing a Ubuntu 18.04 VM onto this server. The primary trick with the
+VM is that I setup 2 hard drives so that I can utilize the BLAZING FAST NVMe
+drive I have in this server for the caching. After this LAN party, I'm going to
+delete/shrink the cache drive since it won't be needed later and I want to keep
+the NVMe space available for other projects. I'll keep the OS &amp; Dockers on the
+mSata drive, powered off, for future use.</p>
+<p><img src="image-4.jpg" alt="" title="VM Configuration"></p>
+<p>Follow the normal Ubuntu install setup.</p>
+<p>Update Ubuntu:</p>
+<pre><code>sudo apt update
+sudo apt dist-upgrade -y
+sudo reboot
+</code></pre>
+<p>Enable SSH:</p>
+<pre><code>sudo systemctl enable ssh
+sudo systemcts start ssh
+</code></pre>
+<h3>Step 3 - Setup Docker</h3>
+<p>This should be pretty easy. Follow the official instructions:
+<a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">https://docs.docker.com/install/linux/docker-ce/ubuntu/</a></p>
+<h3>Step 4 - Install Portainer.io</h3>
+<p>Follow the official instructions:
+<a href="https://portainer.io/install.html">https://portainer.io/install.html</a></p>
+<p>I deviated from the official Portainer guide by not creating a portainer data
+container, and rather mounting to the filesystem. I did this so I can backup the
+settings easily.</p>
+<pre><code>sudo mkdir /opt/appdata/
+docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/appdata/portainer:/data --restart unless-stopped --name portainer portainer/portainer
+</code></pre>
+<p><img src="image-5.jpg" alt=""></p>
+<p>Bam! Now you should be able to access Portainer</p>
+<h3>Step 5 - Format &amp; Automount Cache Drive</h3>
+<p>I followed this guide to format my 700GBs of NVMe storage for cache
+<a href="https://www.digitalocean.com/community/tutorials/how-to-partition-and-format-storage-devices-in-linux">https://www.digitalocean.com/community/tutorials/how-to-partition-and-format-storage-devices-in-linux</a></p>
+<pre><code>sudo parted /dev/sdb mklabel gpt
+sudo parted -a opt /dev/sdb mkpart primary ext4 0% 100%
+sudo mkfs.ext4 -L cache /dev/sdb1
+</code></pre>
+<p>Don't forget to add the drive to <code>/etc/fstab</code> so that it will auto-mount. I have
+mine mounting to <code>/cache</code> in the root of the system.</p>
+<h3>Step 5 - Setup Network for Containers</h3>
+<p>We want to give each container a unique IP address on the network, so we need to
+create a unique IP address for each container so that can happen.</p>
+<p>Since Ubuntu 18.04 uses netplan instead of <code>/etc/network/interfaces</code> , let's try
+that out.</p>
+<p>Create a <code>lanparty.yaml</code> file with your IPs.</p>
+<pre><code>network:
+    ethernets:
+        ens160:
+            addresses:
+                [10.0.0.2/24, 10.42.0.3/24, 10.42.0.4/24, 10.42.0.5/24]
+            gateway4: 10.0.0.1
+            nameservers:
+                    addresses:
+                            - 10.0.0.1
+    version: 2
+</code></pre>
+<p>Then you'll need to restart netplan for the new IPs: <code>sudo netplan apply</code></p>
+<h3>Step 6 - Install the Various Containers</h3>
+<p>We're going to create a container for each service we want to cache. SaltLAN
+shows this is what it would look like if we were to create the commands
+manually:
+ServiceCommandSteam<code>sudo docker run --name steam-cache -p 10.0.0.2:80:80 -d steamcache/steamcache</code>Battle.net<code>sudo docker run --name blizzard-cache -p 10.0.0.3:80:80 -d steamcache/generic</code>Origin<code>sudo docker run --name origin-cache -p 10.0.0.4:80:80 -d steamcache/generic</code>Uplay<code>sudo docker run --name uplay-cache -p 10.0.0.5:80:80 -d steamcache/generic</code>Riot<code>sudo docker run --name riot-cache -p 10.0.0.6:80:80 -d steamcache/generic</code>Frontier<code>sudo docker run --name frontier-cache -p 10.0.0.7:80:80 -d steamcache/generic</code>Windows<code>sudo docker run --name windows-cache -p 10.0.0.8:80:80 -d steamcache/generic</code>Twitch<code>sudo docker run --name twitch-cache -p 10.0.0.9:80:80 -d steamcache/twitch</code>
+Again, since we're going to put our own twist on it, these will be different.
+Specifically we're going to add a mountpath inside the container to point to our
+NVMe drive AND we're going to do it all using Portainer's GUI.</p>
+<p>Containers -&gt; + Add Container</p>
+<p>Then fill in the Settings. I'll show screenshots for a Steam Cache:</p>
+<p><img src="Screenshot_2018-11-19-18.52.56_wehvoV.jpg" alt="" title="Main Steam Container Settings"></p>
+<p><img src="image-8.jpg" alt="" title="Steam Volume Mount Paths"></p>
+<p><img src="image-10.jpg" alt="" title="Steam Restart Policy"></p>
+<p>Once all those are done, you can go ahead and deploy the container.</p>
+<p>Create containers for each of the different services.</p>
+<p>You'll want to read the
+<a href="https://github.com/steamcache/generic">steamcache/generic</a> guide. If you're
+using SNIProxy or SteamDNS (you should use both), you'll set the port mapping
+just to something like <code>443:443</code>, without any IPs. That'll make it so that it is
+mapped to <em>all</em> IPs.</p>
+<p>Also, There are environmental variables you need to set to configure things for
+your environment.</p>
+<p>The only one I'll show is the SteamDNS env variables:</p>
+<p><img src="image-13.jpg" alt="" title="SteamDNS ENV Variables"></p>
+<p>Beyond that, you can handle it. Here's what mine looked like completed:</p>
+<p><img src="image-12.jpg" alt="" title="All Caching Containers"></p>
+<h3>Step 7 - Set your router DNS</h3>
+<p>This step is the last step before things start taking effect. You need to go to
+your router and change your DNS server to a local one. This was <em>not</em> as common
+a feature as I hoped it would be. This may require you to get a nice router and
+setup OpenWRT or something similar onto it to get that running. Good luck on
+this one.</p>
+<h3>Step 8 - Analytics &amp; Maintenance</h3>
+<p>There are a lot of tools that you can setup for this. I didn't really care about
+it. All I did was tweak the script
+<a href="https://github.com/SaltLAN/Configuration/blob/master/scripts/saltlan">from SaltLAN</a>
+and make it fit my environment. You can find that
+<a href="https://gist.github.com/miketweaver/9f8e60db3ee5cbe7dd0cde6b88184956">here</a>.</p>
+<h2>Enjoy!</h2>
+<p>I hope you have enjoyed this guide. I had a lot of fun at my LAN Party and a lot
+of games were had!</p>
+<p>The cache worked very well for use. We saved over 1TB of data transferred, which
+would have killed our Comcast Data Cap. We did run into issues where we were
+limited by the 1GBs cap and the Samba Share would only <em>really</em> push to one
+person at a time, so I'll look at ways of improving this.</p>
+<p>In the future I hope to look at stuff such as
+<a href="https://pthree.org/2012/12/07/zfs-administration-part-iv-the-adjustable-replacement-cache/">Linux ZFS ARC</a>
+and setting up 10G networking.</p>
+<p>with ❤️️ -- <a href="https://twitter.com/_bashNinja">bashNinja</a></p>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

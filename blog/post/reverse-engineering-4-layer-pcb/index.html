@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: Reverse engineering a 4 layer PCB, the slow and destructive way</title>
+    <meta property="og:title" content="801 Labs: Reverse engineering a 4 layer PCB, the slow and destructive way" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+    <meta name="description" content="Excitement! There was a sketchy padded envelope in the mail today. Where do we go next?" /><meta property="og:description" content="Excitement! There was a sketchy padded envelope in the mail today. Where do we go next?" />
+    <link rel="canonical" href="https://801labs.org/blog/post/reverse-engineering-4-layer-pcb/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/reverse-engineering-4-layer-pcb/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/reverse-engineering-4-layer-pcb/IMG_20180416_194909.jpg" />
+    <meta property="og:image:width" content="2000" />
+    <meta property="og:image:height" content="1500" />
+    <meta property="article:author" content="David Freitag" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: Reverse engineering a 4 layer PCB, the slow and destructive way</h1>
+    <div class="card-body">
+      <p class="description"><span>description:</span> Excitement! There was a sketchy padded envelope in the mail today. Where do we go next?</p>
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/ee/">EE</a>, <a href="../../../blog/tag/re/">RE</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2018-11-16</span>
+         | <span style="display: inline-block;">date updated: 2018-11-16</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/david-freitag.jpg" alt="David Freitag's avatar" />
+        <span class="author-name">David Freitag</span>
+      </p>
+      <p class="cover">
+        <img src="IMG_20180416_194909.jpg" alt="Reverse engineering a 4 layer PCB, the slow and destructive way" />
+      </p>
+    </div>
+    <p>So say there's a Chinese silicon vendor which designs and sells a chip that does
+a lot of really fancy stuff. You're super interested because said fancy bits can
+be had for the low low price of a few hundred pennies. Awesome, you might say,
+lets buy them! But there's an issue. Documentation. Silicon vendors, Chinese or
+otherwise, have a nasty habit of making it nearly impossible to find proper
+documentation for a specific product; whether it's poorly documented, NDA'd, or
+in some cases simply nonexistent.</p>
+<p><img src="take_my_money.png" alt=""></p>
+<p>So what can you do? You could find someone who sells a product based on the chip
+you want to use, but if it's extensible and has a lot of features you may not be
+able to find something you can easily shoehorn into your design. You could try
+contacting them to see if the offer of buying a zillion of their chips can coax
+them into releasing precious bits of documentation, but there are generally
+engineering fees associated with this. You could offer to sign an NDA, but
+generally they don't let someone off the street sign one, and that precludes you
+from open sourcing your awesome new project.</p>
+<p>Once you've tried knocking on those doors, there's basically not much else you
+can do to get proper documentation. In your hypothetical situation, let's assume
+there is one or more existing products which are, of course, not open source
+based on this fancy hotness you're so interested in. For argument's sake, lets
+assume that this chip is not something trivially placed on a simple 2 layer
+board. It's QFN, BGA, quite possibly with some RF goodness. Since, aside passive
+component values, reverse engineering a 2 layer board can pretty easily be done
+with just high quality images.</p>
+<p>Meet the Genesys Logic
+<a href="http://www.genesyslogic.com/en/product_view.php?show=53">GL3224</a>. Less than
+<a href="https://lcsc.com/product-detail/USB_GENESYS_GL3224-OIY04_GL3224-OIY04_C157357.html">200 pennies</a>
+in single quantity! It's a fancy USB 3.0 eMMC/SD MMC controller with a bunch of
+really cool features. Genesys Logic themselves offer up a sick single-page (as
+per usual) short touting all of its features. A bit of Google fu reveals a 25
+page datasheet and a few existing products based on this chip. One product
+<a href="https://jiffyshop.com.au/SBC/odroid-c1/160-usb30-emmc-module-writer.html">in particular</a>
+caught my eye. Searches on Amazon etc for GL3224 turned up a lot of products,
+mostly polished ones with nice injection mold plastic cases that were a bit too
+pricey. At the time of this writing, the
+<a href="https://www.hardkernel.com/main/products/prdt_info.php?g_code=G152105300286">Hardkernel store</a>
+that I bought these for $10 404's, but you can still get these boards fairly
+cheaply.</p>
+<p><img src="odroid_emmc-1.jpg" alt=""></p>
+<p>So you buy a couple of these, they're on the slow boat from China. What's the
+first step? Is there anything we can do while we wait? Of course! The top and
+bottom layers are exposed (albeit on black soldermask which is pretty but a pain
+to RE), and you can begin like so many 2 layer RE's have in the past. By staring
+and squinting at a series of potato quality pictures of the board, highlighting
+traces, colorizing layers, overlaying things, and trying to get a rough idea of
+what's going on. From the datasheet we have the pinout and other general
+information about the chip that will help us, and we have the pinout of the eMMC
+connector because it's one of the ODROID standardized ones.</p>
+<p><img src="odroid_emmc.jpg" alt=""></p>
+<p>Excitement! There was a sketchy padded envelope in the mail today. Where do we
+go next? You're going to need some hot air reworking tools and a relatively high
+DPI scanner.
+<a href="https://www.amazon.com/gp/product/B00SQ6CCSS">The one that I bought</a> is capable
+of doing 9600 DPI (which is absolutely insane), but you can probably get away
+with anything above ~600 DPI. Start by removing all of the tall components,
+large capacitors, connectors, etc. The taller the components, the more out of
+focus the images you take will be, most scanners have a fixed focal point.</p>
+<p><img src="emmc_crystal.jpg" alt="" title="4800 DPI scans are crazy"></p>
+<p><img src="img010_small.jpg" alt=""></p>
+<p>Once you have some quality scans of the board, start carefully removing
+components one by one. If there are reference designators on the board, use them
+to identify each component as you remove it, measure it, and record the value.
+Keeping a meticulous record will help when you go to design your version. Once
+you've pulled all the parts off and cataloged them, use a soldering iron, some
+leaded solder, and a bunch of flux to clean all of the excess solder. Take as
+many scans as you want, once you start sanding there's no turning back.</p>
+<pre><code>C1        1.19uF         R1        32.7Ω
+C2        114nF          R2        9.82kΩ
+C3        106nF          R3        0.2Ω
+C4        106nF          R6        1.001MΩ
+C5        114nF          R7        683Ω
+C6        106nF          R8        10.06kΩ
+C7        1.16uF         R9        0.6Ω
+C10       1.18uF         R10       463.5Ω
+C14       2.27uF
+C15       2.24uF
+C16       ?pF
+C17       ?PF
+C18       115nF
+C19       108nF
+C20       108nF
+</code></pre>
+<p><img src="img011_small.jpg" alt=""></p>
+<p>For the sanding, I used a combination of 200 and 600 grit wet dry sand paper.
+You can get this at any local hardware store. Taking off the soldermask will be
+extremely quick, especially on this board where you can literally see through
+the soldermask. Wet a small piece of the 600 grid sand paper and start sanding</p>
+<p><img src="img013_small.jpg" alt="" title="Top Copper Layer"></p>
+<p>You can see that the contrast on the bare copper compared to the PCB core
+material is much higher compared to when everything is covered with soldermask.
+Next, we switch to the 200 grit to sand through the much thicker layer of copper
+and core material so that we can expose the inner layer.</p>
+<p><img src="img015_small.jpg" alt="" title="Core material"></p>
+<p>Be sure to apply even pressure while sanding, if you don't you can end up with
+edges of the board that sand clear through the inner copper layer like I did.
+It's going to take a while, and make a gigantic mess. My desk is still a sickly
+shade of green because of this project.</p>
+<p><img src="img016_small.jpg" alt="" title="Inner Copper Layer 2"></p>
+<p>Again, I need to stress that even pressure is extremely important, you can see I
+even started to wear away parts of that power rail. Once you get to this point,
+with a 4 layer board, you're done. Switch to the other side, rinse, and repeat.
+Once you have exposed layer 3 (which in this case was frustratingly only solid
+ground pour), take all of your scans and composite them. Set each layer to a
+pure color by dumping the saturation and tweaking with the layer opacity until
+you get something you can understand. In this case, I chose red for the top
+layer, green for layer 2, and blue for the bottom layer. The result is pretty
+good, but if you really put some work into it you can get really great images.</p>
+<p><img src="img013_composite_small.jpg" alt="" title="Composited image with 3 copper layers"></p>
+<p>Now that the RE work is done, it's time to do your schematic and layout work.
+The WIP repository can be found <a href="https://github.com/dvdfreitag/USB3-eMMC">here</a>,
+and the Eagle library for my GL3224 part can be found
+<a href="https://github.com/dvdfreitag/eagle_libraries">here</a>. Keen observers will
+notice that the connector and pinout for the eMMC that I chose is identical to
+the one that the Nintendo Switch uses. This board is meant to be a high speed
+NAND backup and restore utility for the Switch.</p>
+<p><img src="emmc_re.jpg" alt=""></p>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

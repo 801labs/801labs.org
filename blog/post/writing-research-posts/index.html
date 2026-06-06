@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: Writing research posts</title>
+    <meta property="og:title" content="801 Labs: Writing research posts" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+    <meta name="description" content="This guide will go over all the details and steps required to post a research article." /><meta property="og:description" content="This guide will go over all the details and steps required to post a research article." />
+    <link rel="canonical" href="https://801labs.org/blog/post/writing-research-posts/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/writing-research-posts/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/writing-research-posts/image.png" />
+    <meta property="og:image:width" content="1076" />
+    <meta property="og:image:height" content="489" />
+    <meta property="article:author" content="Pips" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: Writing research posts</h1>
+    <div class="card-body">
+      <p class="description"><span>description:</span> This guide will go over all the details and steps required to post a research article.</p>
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/how-to/">How to</a>, <a href="../../../blog/tag/tutorial/">Tutorial</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2021-11-03</span>
+         | <span style="display: inline-block;">date updated: 2025-10-20</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/pips.jpg" alt="Pips's avatar" />
+        <span class="author-name">Pips</span>
+      </p>
+      <p class="cover">
+        <img src="image.png" alt="Writing research posts" />
+      </p>
+    </div>
+    <p>Lets talk about how to write a research post to appear on the research portal</p>
+<p>https://801labs.org/blog/</p>
+<p>Previously, we used the platform Ghost to write and publish research articles,
+how tos, and anouncments. This time around in the new website, we have had the
+research blog function built directly in.</p>
+<p>All a user has to do to create an article</p>
+<ul>
+<li>go into <a href="https://github.com/801labs/801labs.org">Github</a></li>
+<li>fork the repo</li>
+<li>navigate to the <code>/content/blog</code> directory in the <code>main</code> branch.</li>
+<li>create a new folder with a dash separated name, such as <code>2025-10-19-example-post</code>. This folder name will be the <code>slug</code> for your article.</li>
+<li>create a file named <code>index.md</code> in this folder.</li>
+<li>import the below code block into your new markdown file. This block of code
+instructs the website on how to display information about the post. This
+includes tags, a title, a cover image, an author, etc.</li>
+<li>put all images for your post into this folder, and refer to them at a path relative to your <code>index.md</code>. This means that you'll know you have your images in the right place when you can see them in the &quot;markdown preview&quot; mode that your IDE provides.</li>
+</ul>
+<pre><code>---
+title: A solid Title
+date_published: 2025-10-20T01:14:27.544Z
+date_updated: 2025-10-20T01:14:27.544Z
+tags: tag1, tag2
+description: A brief little discription of what your post is about.
+cover: 'cover.png'
+author:
+  name: your name
+  avatar: 'avatars/youravatar.png'
+---
+</code></pre>
+<ul>
+<li>write your post</li>
+<li>preview your post locally by opening a terminal in the root folder of the project and running <code>npm install &amp;&amp; npm run start</code> to generate a build. Then you can look at the <code>dist</code> folder to verify that your page looks like it built correctly.</li>
+<li>create a pull request with your post</li>
+</ul>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

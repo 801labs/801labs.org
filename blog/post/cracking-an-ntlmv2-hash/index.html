@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: A 9-step recipe to crack a NTLMv2 Hash from a freshly acquired .pcap</title>
+    <meta property="og:title" content="801 Labs: A 9-step recipe to crack a NTLMv2 Hash from a freshly acquired .pcap" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+
+    <link rel="canonical" href="https://801labs.org/blog/post/cracking-an-ntlmv2-hash/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/cracking-an-ntlmv2-hash/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/cracking-an-ntlmv2-hash/CredUIHTTPAuth.jpg" />
+    <meta property="og:image:width" content="459" />
+    <meta property="og:image:height" content="330" />
+    <meta property="article:author" content="kimb3r" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: A 9-step recipe to crack a NTLMv2 Hash from a freshly acquired .pcap</h1>
+    <div class="card-body">
+      
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/how-to/">how to</a>, <a href="../../../blog/tag/pcap/">pcap</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2018-12-18</span>
+         | <span style="display: inline-block;">date updated: 2018-12-18</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/kimb3r.jpg" alt="kimb3r's avatar" />
+        <span class="author-name">kimb3r</span>
+      </p>
+      <p class="cover">
+        <img src="CredUIHTTPAuth.jpg" alt="A 9-step recipe to crack a NTLMv2 Hash from a freshly acquired .pcap" />
+      </p>
+    </div>
+    <ol>
+<li>Open your .pcap that contains an NTLMv2 hash in Wireshark.</li>
+<li>Filter by ntlmssp to get the authentication handshake.</li>
+</ol>
+<p><img src="image-3.jpg" alt="" title="artisanal smb2 authentication packets"></p>
+<ol start="3">
+<li>In this case, we get three packets. Find the NTLMSSP_AUTH packet. Filter the
+packet down to the Security Blob layer to get to the juicy good stuff:</li>
+</ol>
+<p><img src="image-5.png" alt="" title="the goods"></p>
+<ol start="4">
+<li>
+<p>Copy out the domain name and user name to a text document.</p>
+</li>
+<li>
+<p>Drill down into the NTLM Response section to find NTProofStr and NTLMv2
+response. Copy both of these out to the text document as a Hex String.</p>
+</li>
+</ol>
+<p><img src="image-6.jpg" alt="" title="cross the streams"></p>
+<ol start="6">
+<li>Notice that NTLMv2Response begins with the ntlmProofStr, so delete the
+ntlmProofStr from the NTLMv2Response.</li>
+</ol>
+<p><img src="image-7.jpg" alt=""></p>
+<ol start="7">
+<li>Enter ntlmssp.ntlmserverchallenge into the search filter. This will highlight
+the packet where the NTLM Server Challenge is found, generally the packet
+before the NTLM_Auth packet. Copy this value to the text document as a Hex
+String.</li>
+</ol>
+<p><img src="image-8.jpg" alt=""></p>
+<ol start="8">
+<li>Put the values into the following format and save it as crackme.txt:</li>
+</ol>
+<p>username::domain:ServerChallenge:NTproofstring:modifiedntlmv2response</p>
+<p><img src="image-12.png" alt=""></p>
+<ol start="9">
+<li>Find your favorite password list (RockYou? best_1000_passwords2018.txt?) and
+open a terminal to use hashcat to run:</li>
+</ol>
+<blockquote>
+<p>hashcat -m 5600 crackme.txt passwordlist.txt</p>
+</blockquote>
+<p>and it will give you the user's password!</p>
+<p><img src="image-13.png" alt="" title="congrats on the hax!"></p>
+<p>sources for more information:</p>
+<ul>
+<li><a href="https://www.root9b.com/newsroom/attacking-windows-fallback-authentication/">https://www.root9b.com/newsroom/attacking-windows-fallback-authentication/</a></li>
+<li><a href="https://foxglovesecurity.com/2016/09/26/rotten-potato-privilege-escalation-from-service-accounts-to-system/">https://foxglovesecurity.com/2016/09/26/rotten-potato-privilege-escalation-from-service-accounts-to-system/</a></li>
+</ul>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

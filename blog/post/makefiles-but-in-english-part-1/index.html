@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../../../styles.css" />
+    <title>801 Labs: "Makefiles, but in English: Part 1"</title>
+    <meta property="og:title" content="801 Labs: "Makefiles, but in English: Part 1"" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="../../../images/801labs_favicon.png" />
+
+    <meta name="description" content="Make is intelligent enough to be able to distinguish between them at runtime. But it's probably best to avoid storing different types in a variable." /><meta property="og:description" content="Make is intelligent enough to be able to distinguish between them at runtime. But it's probably best to avoid storing different types in a variable." />
+    <link rel="canonical" href="https://801labs.org/blog/post/makefiles-but-in-english-part-1/" />
+    <meta property="og:url" content="https://801labs.org/blog/post/makefiles-but-in-english-part-1/" />
+    <meta property="og:image" content="https://801labs.org/blog/post/makefiles-but-in-english-part-1/makefile-1.jpg" />
+    <meta property="og:image:width" content="817" />
+    <meta property="og:image:height" content="476" />
+    <meta property="article:author" content="David Freitag" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="../../../">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="../../../about/">About</a></li>
+            <li><a href="../../../blog/">Blog</a></li>
+            <li><a href="../../../get-involved/">Get Involved</a></li>
+            <li><a href="../../../contact/">Contact Us</a></li>
+            <li><a href="../../../donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      
+<article class="blog-item">
+  <div class="window">
+    <h1>Blog: "Makefiles, but in English: Part 1"</h1>
+    <div class="card-body">
+      <p class="description"><span>description:</span> Make is intelligent enough to be able to distinguish between them at runtime. But it's probably best to avoid storing different types in a variable.</p>
+      <p class="tags"><span>tags:</span> <a href="../../../blog/tag/how-to/">how to</a>, <a href="../../../blog/tag/makefile/">Makefile</a></p>
+      <p class="date">
+        <span style="display: inline-block;">date published: 2018-12-13</span>
+         | <span style="display: inline-block;">date updated: 2018-12-18</span>
+      </p>
+      <p class="author">
+        <span class="author-name">author:</span>
+        <img class="author-avatar" src="../../../images/avatars/david-freitag.jpg" alt="David Freitag's avatar" />
+        <span class="author-name">David Freitag</span>
+      </p>
+      <p class="cover">
+        <img src="makefile-1.jpg" alt=""Makefiles, but in English: Part 1"" />
+      </p>
+    </div>
+    <p>In this multi-part series, I will be covering Makefiles and the general behavior
+of Make itself. The only real prerequisite knowledge needed is a general
+understanding of Bash and the common Bash builtins. We are going to cover
+variables, functions, builtins (variables and functions), rules, and recipes. By
+the time you are done with this series, you should have a confident grasp of
+Makefiles and have the ability to quickly get started with any project. However,
+before I get started I'd like to make a few points. First, this series is not
+intended to serve as a reference for Make. Instead, it will give you a basic
+understanding of how to get started and, more importantly, it will give you a
+set of keywords to supplement your googlefu. Secondly, the snippets and examples
+that follow are tested using GNU Make v4.1. There exist several different
+versions and indeed completely different implementations of Make. There may be
+slight syntax differences in these different versions and implementations of
+Make, but the keywords in this series should point you in the right direction.</p>
+<h1>Part 1a: Make Variables</h1>
+<p>Makefiles, at a very basic level, are more or less script files. They allow the
+user to define functions, variables, they begin &quot;execution&quot; from the first line,
+and continue until termination. To define a variable in a Makefile, simply
+declare it with a name, followed by an assignment operator, followed by the
+value. For example: <code>FOO = BAR</code> will define a variable named <code>FOO</code>, with the
+value <code>BAR</code>. The actual value you set only becomes important in the context
+which it is used. Syntactically speaking, there is no requirement that Makefile
+variables be capitalized, but it immediately distinguishes them from functions
+and builtins; to each their own.</p>
+<p>Although Make variables behave similar to Environmental Variables, these values
+are not globally set. For example, if you define some value <code>FOO</code> in your
+makefile, you will not see that value present in your C file (unless you
+explicitly instruct your compiler to). Similar to Bash, Make does not really
+have a type system, a variable defined to a string can later be assigned to an
+integer. Make itself is intelligent enough to be able to make the distinction
+between them at runtime. That being said, it is probably best to avoid storing
+different types in a variable.</p>
+<p>There are a series of
+<a href="https://www.gnu.org/software/make/manual/html_node/Setting.html">assignment operators</a>
+in Make, and all of them behave slightly differently. Before I get into them,
+there is a concept which needs introducing, and that is expansion. If you are
+familiar with Bash and linux Environmental Variables, you should be familiar
+with the concept of expansion. Essentially, expansion is the evaluation of an
+assignment, whether it contains references to other variables or functions.
+Depending on the desired level of expansion, you can run into issues such as
+infinite recursion and infinite self-references. To address these issues, the
+authors of Make created different operators (actual operators in quotes to avoid
+confusion):</p>
+<ul>
+<li>&quot;=&quot;: Variable assignment using <em>recursive</em> expansion.</li>
+<li>&quot;:=&quot; and &quot;::=&quot;:
+<a href="https://www.gnu.org/software/make/manual/html_node/Flavors.html#Flavors">&quot;Simple&quot; variable assignment</a>
+using only a single level of expansion. This prevents infinite expansion or
+self reference. The difference between the single-colon and double-colon
+versions seems to be POSIX compliance, and does not work on older versions of
+Make.</li>
+<li>&quot;?=&quot;: Conditional variable assignment operator. This assignment will only
+occur if the variable being assigned to does not already exist. This is
+helpful for creating defaults for values which can be passed on the command
+line. Note that an empty value <strong>does</strong> count as being defined in Make.</li>
+<li>&quot;+=&quot;:
+<a href="https://www.gnu.org/software/make/manual/html_node/Appending.html">Append</a>
+assignment operator. This operator concatenates a space followed by the
+assigned value. <code>FOO += bar</code> is the equivalent of saying <code>FOO := $(FOO) bar</code>.
+Note that we are using <code>:=</code> for a self-reference, using <code>=</code> can cause issues.</li>
+</ul>
+<p>Now that we can define variables, how do we refer to them in the rest of the
+Makefile? Both variables and builtins are referred to using the <code>$()</code> operator,
+for example:</p>
+<pre><code>FOO := foo
+BAR := $(FOO) bar
+</code></pre>
+<p>If you were to echo <code>BAR</code> in this Makefile, you would find that it contains
+<code>foo bar</code>. This shows not only variable reference, but Make's extremely simple
+concatenation. Again, if you are familiar with Bash this should all be familiar.
+Let's break down exactly how this works. First, we assign the value of <code>FOO</code>
+using one level of expansion. The value we set is fixed, there are no variable
+references or builtins to expand, it's simply set. <code>BAR</code>, on the other hand,
+must expand the variable reference to <code>FOO</code>, get it's value, and concatenate &quot;
+bar&quot; onto it. Note the space.</p>
+<h1>Part 1b, Make builtin functions</h1>
+<p><a href="https://www.gnu.org/software/make/manual/html_node/Syntax-of-Functions.html#Syntax-of-Functions">Calling functions</a>
+in Makefiles is similar to the way that variables are referenced, wih the <code>$()</code>
+operator. This is true for both builtin functions, and user-defined functions,
+however user-defined functions are slightly different. In a Makefile, it is
+possible to define custom functions, but they are rarely used, so I will
+primarily focus on using builtin functions. For the sake of brevity, I will not
+be covering every single builtin available to you in Make, but I will cover how
+they are used, and what kind of functions are available to you.</p>
+<p>To call a function in Make, you first need to know the name of the function, and
+the arguments which it accepts. The arguent system in Make is not so concrete as
+you might expect, instead it differs slightly from function to function. For
+instance, <code>FOO := $(wildcard *.c)</code> creates a variable called <code>FOO</code> and assigns
+the value to the output of the
+<a href="https://www.gnu.org/software/make/manual/html_node/Wildcard-Function.html">wildcard</a>
+function. This function outputs the names of all files in the current directory
+which match the specified pattern. The wildcard is commonly used for automatic
+source file detection in simple projects. Along with the wildcard function,
+there are several other types of functions which are available in Make:</p>
+<ul>
+<li><a href="https://www.gnu.org/software/make/manual/html_node/Text-Functions.html#Text-Functions">Text Functions</a>:
+General text manipulation functions. They can be used to do things like
+substitutions, pattern-based subsitutions, changing file extensions, etc</li>
+<li><a href="https://www.gnu.org/software/make/manual/html_node/Conditional-Functions.html#Conditional-Functions">Conditional Functions</a>:
+Provide a mechanism to implement a structure of logic within the Makefile.</li>
+<li><a href="https://www.gnu.org/software/make/manual/html_node/File-Function.html#File-Function">File</a>
+and
+<a href="https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html#File-Name-Functions">File Name</a>
+Functions: Provides the user with utilities to manipulate file names, and do
+simple file I/O</li>
+<li><a href="https://www.gnu.org/software/make/manual/html_node/Call-Function.html#Call-Function">Call Function</a>:
+Allows the user to call user-defined functions.</li>
+</ul>
+<p>This is not an exhaustive list, for the full list of builtin functions see
+<a href="https://www.gnu.org/software/make/manual/html_node/Functions.html">this</a>.</p>
+<h1>Part 1c, user-defined functions</h1>
+<p>Like some of the features in Make, user-defined functions exist to cover certain
+edge cases. You should not need them, but if you do you'll <em>really</em> need them.
+If you're familiar with C/C++ macros, then you will already be familiar with how
+Make user-defined functions work. The
+<a href="https://www.oreilly.com/openbook/make3/book/ch04.pdf">O'Rielly Make open book</a>
+is a very good reference for user-defined functions. These functions must be
+defined on a single line, but the standard backslash notation will allow the
+user to split a function on to multiple lines.</p>
+<pre><code>define myfunction
+    echo &quot;Hello, World!&quot;
+</code></pre>
+<p>To call this function, you use the <code>call</code> builtin function, <code>$(call myfunction)</code></p>
+<p>This section is glossed over for a few reasons. Chances are if you're using a
+Makefile user-defined function you're probably Doing It Wrong™, it's already
+quite well documented in the linked book, and it's a fairly advanced feature of
+Make.</p>
+
+  </div>
+</article>
+
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="../../../about/">ABOUT</a>
+            <span>|</span>
+            <a href="../../../blog/">BLOG</a>
+            <span>|</span>
+            <a href="../../../get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="../../../contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="../../../code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="../../../terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="../../../donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

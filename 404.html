@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/styles.css" />
+    <title>801 Labs: 404, Not Found</title>
+    <meta property="og:title" content="801 Labs: 404, Not Found" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:logo" content="https://801labs.org/images/801labs_favicon.png" />
+    <link rel="icon" type="image/png" href="/images/801labs_favicon.png" />
+
+    <meta name="description" content="This page could not be found." /><meta property="og:description" content="This page could not be found." />
+    <link rel="canonical" href="https://801labs.org/404.html" />
+    <meta property="og:url" content="https://801labs.org/404.html" />
+    <meta property="og:image" content="https://801labs.org/images/801labs_generic_opengraph_thumbnail.webp" />
+    <meta property="og:image:width" content="1920" />
+    <meta property="og:image:height" content="1080" />
+  </head>
+  <body>
+    <header>
+      <div id="header-content">
+        <div id="site-logo"><a href="/">Home</a></div>
+        <label id="nav-menu-toggle" for="nav-collapse-button">
+          <input type="checkbox" id="nav-collapse-button" />
+          <span id="nav-menu-icon"></span>
+        </label>
+        <nav>
+          <ul>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/get-involved/">Get Involved</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+            <li><a href="/donate/" class="nav-donate">Donate &gt;</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="window content">
+<h1>404: Not Found</h1>
+<p>This page could not be found.</p>
+<p>Perhaps visit our <a href="/">homepage</a> or <a href="/blog/">blog</a>!</p>
+<script>
+var replaces = [
+  [
+    /research-portal\/tag\/(.*?\/)?(.+)/g,
+    function(match, tag, _pagination) {
+      debugger;
+      return 'blog/tag/' + tag ;
+    },
+  ],
+  [/research-portal/g, 'blog'],
+  ['/get-involved/events', '/#Upcoming-Events'],
+  ['/location-and-hours', '/contact/'],
+  ['the_old_absolute_path','the_new_absolute_path'],
+];
+var path = window.location.pathname;
+replaces.forEach(function(pair) {
+    var search = pair[0];
+    var replace = pair[1];
+    path = path.replace(search, replace);
+    if(window.location.pathname !== path) {
+      window.location.pathname = path
+    }
+});
+</script>
+</div>
+    </div>
+    <footer>
+      <div id="footer-content">
+        <nav>
+          <h3 class="special-alt-text">Social media links</h3>
+          <ul id="svg-link-list">
+            <li><a class="svg-footer-link" id="svg-discord" href="https://discord.gg/uRSthurdPY">discord</a></li>
+            <li><a class="svg-footer-link" id="svg-twitter" href="https://twitter.com/801labs">twitter</a></li>
+            <li><a class="svg-footer-link" id="svg-meetup" href="https://www.meetup.com/801labs/">meetup</a></li>
+            <li><a class="svg-footer-link" id="svg-youtube" href="https://www.youtube.com/c/801LabsSaltLakeCity">youtube</a></li>
+            <li><a class="svg-footer-link" id="svg-github" href="https://github.com/801labs/">github</a></li>
+          </ul>
+        </nav>
+        <div id="footer-nav-box">
+          <nav>
+            <a href="/about/">ABOUT</a>
+            <span>|</span>
+            <a href="/blog/">BLOG</a>
+            <span>|</span>
+            <a href="/get-involved/">GET INVOLVED</a>
+            <span>|</span>
+            <a href="/contact/">CONTACT US</a>
+          </nav>
+          <p>© 2024 801Labs.org. All rights reserved.</p>
+          <p>801 Labs hackerspace is a 501(c)(3) that is open to the public!</p>
+          <p>353 East 200 South Suite #201, Salt Lake City, UT 84111</p>
+          <p>Open Thursdays from 5:00 PM to 10:00 PM and other days by announcement.</p>
+          <p class="bottom-links">
+            <a href="/code-of-conduct/">Code of Conduct</a>
+            <span>|</span>
+            <a href="/terms/">Terms</a>
+            <span>|</span>
+            <a class="nav-donate" href="/donate/">Donate</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
