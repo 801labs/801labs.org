@@ -25,4 +25,4 @@ EXPOSE 8080
 
 # run basic webserver
 # todo: make it run NGINX
-CMD [ "http-server", "out" ]
+CMD [ "http-server", "dist" ]
