@@ -52,7 +52,7 @@ Make sure you have the required docker services installed.
 
 Make sure you have the required docker services installed on your host.
 
-run `git clone https://github.com/80llabs/801labs.org`
+run `git clone https://github.com/801labs/801labs.org`
 
 `cd 801labs.org/`
 
