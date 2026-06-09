@@ -7,7 +7,7 @@ tags: Threat-Intel, Linux, Oaks-Internet-Safari
 description: Hunting Residential Threats and Fighting Automated Botnets
 cover: 'banner.png'
 author_name: OakAtsume
-author_avatar: 'avatars/oak.jpg'
+author_avatar: 'avatars/oak.png'
 ---
 
 **Residential Threat Hunting and the War on Automated Threats and Botnets** </br>
