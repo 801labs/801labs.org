@@ -1,12 +1,19 @@
 {
-    "cc.etke.synapse-admin": {
-        "asManagedUsers": [],
+    "cc.etke.ketesa": {
+        "asManagedUsers": [
+            "^@bot\\.draupnir:801labs\\.org$"
+        ],
         "corsCredentials": "same-origin",
-        "externalAuthProvider": false,
+        "externalAuthProvider": true,
         "menu": [],
-        "restrictBaseUrl": "https://matrix.801labs.org"
+        "restrictBaseUrl": "https://matrix.801labs.org",
+        "wellKnownDiscovery": true
     },
     "m.homeserver": {
         "base_url": "https://matrix.801labs.org"
+    },
+    "org.matrix.msc2965.authentication": {
+        "account": "https://matrix.801labs.org/auth/account",
+        "issuer": "https://matrix.801labs.org/auth/"
     }
 }
