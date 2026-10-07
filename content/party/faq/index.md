@@ -80,4 +80,4 @@ Digital Dusk is run by 801 Labs, a nonprofit hackerspace out of Salt Lake City U
 * Food truck
 
 ## What conduct is expected of me and other guests?
-Please see our [Digital Dusk Code of Conduct]("../conduct"). All attendees are expected to abide by the Code of Conduct.
+Please see our [Digital Dusk Code of Conduct](../conduct). All attendees are expected to abide by the Code of Conduct.
