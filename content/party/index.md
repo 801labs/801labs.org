@@ -2,12 +2,12 @@
 title: SAINTCON PARTY
 template: home
 description: 801Labs Presents - Digital Dusk
-cover: 'DIGIDUSKJPG.jpg'
+cover: 'DIGIDUSK.webp'
 ---
 
 # 801Labs Presents - Digital Dusk
 
-![DIGITAL DUSK; FEATURING: CHILD OF GOD, FEZMASTER, LE D, KVEG, MVN7IS | SAINTCON AFTERPARTY | 10/29 Provo, UT 6-11pm | PRESENTED BY: DC801, 801 LABS, HS801](DIGIDUSKJPG.jpg)
+![DIGITAL DUSK; FEATURING: CHILD OF GOD, FEZMASTER, LE D, KVEG, MVN7IS | SAINTCON AFTERPARTY | 10/29 Provo, UT 6-11pm | PRESENTED BY: DC801, 801 LABS, HS801](DIGIDUSK.webp)
 ```
 BOOTING 801Labs_Presents_DIGITAL DUSK.EXE...
 
@@ -57,7 +57,7 @@ Enter through the back lot
 </div>
 
 ### Getting there from SAINTCON
-![Digital Dusk Map](digital_dusk_map.png)
+![Digital Dusk Map](digital_dusk_map.webp)
 
 ----
 
