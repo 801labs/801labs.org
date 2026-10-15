@@ -1,0 +1,35 @@
+# 801 Labs Vulnerability Disclosure & Bug Bounty Program
+
+801 Labs welcomes responsible security research and encourages researchers to report vulnerabilities affecting infrastructure, websites, applications, or systems operated by 801 Labs.
+
+### Scope
+
+Systems explicitly operated and authorized for testing by 801 Labs, including `801labs.org` and its subdomains, unless otherwise excluded.
+
+### Responsible Disclosure
+
+- Report vulnerabilities to security@801labs.org.
+- Avoid accessing, modifying, or destroying other users' data.
+- Do not conduct denial-of-service attacks, social engineering, or physical intrusion.
+- Allow reasonable time for remediation before public disclosure.
+- Limit testing to systems that 801 Labs owns or has explicitly authorized for testing.
+
+### Bug Bounties
+
+801 Labs may offer monetary rewards for eligible, independently verified security vulnerabilities.
+
+Reward amounts, eligibility, and payment availability are determined by 801 Labs and must be confirmed with the program administrators.
+
+Submission does not guarantee payment.
+
+### Response Commitments
+
+801 Labs aims to acknowledge reports within seven calendar days and provide periodic status updates as remediation progresses.
+
+### Safe Harbor
+
+801 Labs supports good-faith, authorized security research conducted in accordance with this policy. Research outside the published scope is not authorized by this policy.
+
+### Contact
+
+security@801labs.org
