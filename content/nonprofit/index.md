@@ -31,3 +31,8 @@ Lets talk about donations! Any donation you have made/make this year may now be 
 We are so excited to be moving forward and upwards. We also cannot wait to be able to see everyones faces again, and we will have a separate announcement regarding how and when the hackerspace will be re-opened very soon. If you have questions, comments, concerns, or are interested in engaging more with this community but are unsure how, please reach out to [board@801labs.org](mailto:board@801labs.org)
 
 Thanks y'all, happy hacking <3
+
+Board Members of 801 Labs:
+Michael Weaver (bashNinja)
+Kayden Lindsey (pips)
+Lance Buttars (nemus)
