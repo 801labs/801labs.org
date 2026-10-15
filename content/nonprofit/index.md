@@ -33,6 +33,6 @@ We are so excited to be moving forward and upwards. We also cannot wait to be ab
 Thanks y'all, happy hacking <3
 
 Board Members of 801 Labs:
-Michael Weaver (bashNinja)
-Kayden Lindsey (pips)
-Lance Buttars (nemus)
+* Michael Weaver (bashNinja)
+* Kayden Lindsey (pips)
+* Lance Buttars (nemus)
